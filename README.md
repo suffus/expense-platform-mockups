@@ -1,6 +1,6 @@
 # Expense platform mockups
 
-Unofficial, original review reconstructions of Expensify, Xero, and Zoho Expense for internal comparison. Not affiliated with those vendors. Not part of Tinker HR.
+Unofficial, original review reconstructions of Expensify, Xero, Zoho Expense, and SAP Concur for internal comparison. Not affiliated with those vendors. Not part of Tinker HR.
 
 Hub: https://suffus.github.io/expense-platform-mockups/
 

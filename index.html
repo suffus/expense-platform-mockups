@@ -4,11 +4,11 @@
   Expense platform mockups hub.
 
   Open this file in a browser. It is offline and self-contained.
-  Three unofficial full-suite reconstructions of competitor expense products,
+  Four unofficial full-suite reconstructions of competitor expense products,
   using the same Northwind Labs sample company so the products can be compared.
 
   These are original review layouts inspired by publicly documented product
-  structure. They are not affiliated with Expensify, Xero, or Zoho.
+  structure. They are not affiliated with Expensify, Xero, Zoho, or SAP Concur.
 -->
 <html lang="en">
 <head>
@@ -28,6 +28,8 @@
   --xero-ink: #1a3c57;
   --zoho: #e42527;
   --zoho-ink: #1a1a1a;
+  --concur: #0070f2;
+  --concur-ink: #1d2d3e;
   --radius: 14px;
   --sans: Inter, ui-sans-serif, system-ui, sans-serif;
 }
@@ -53,7 +55,8 @@ header p { margin: 0; color: var(--muted); max-width: 62ch; }
   font-size: 13px;
 }
 .grid { display: grid; gap: 16px; }
-@media (min-width: 860px) { .grid.three { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 860px) { .grid.three { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .grid.three { grid-template-columns: repeat(4, 1fr); } }
 .tile {
   display: flex;
   flex-direction: column;
@@ -69,6 +72,7 @@ header p { margin: 0; color: var(--muted); max-width: 62ch; }
 .tile.exp .tile-hero { background: var(--exp-ink); }
 .tile.xero .tile-hero { background: var(--xero-ink); }
 .tile.zoho .tile-hero { background: #1b1b1b; }
+.tile.concur .tile-hero { background: var(--concur-ink); }
 .mark {
   width: 36px; height: 36px; border-radius: 10px;
   display: grid; place-items: center;
@@ -77,6 +81,7 @@ header p { margin: 0; color: var(--muted); max-width: 62ch; }
 .tile.exp .mark { background: var(--exp); color: var(--exp-ink); }
 .tile.xero .mark { background: var(--xero); color: #083247; }
 .tile.zoho .mark { background: var(--zoho); color: #fff; }
+.tile.concur .mark { background: var(--concur); color: #fff; }
 .tile-hero h2 { margin: 0 0 6px; font-size: 20px; }
 .tile-hero p { margin: 0; opacity: 0.82; font-size: 13px; }
 .tile-body { padding: 16px 20px 20px; display: grid; gap: 10px; flex: 1; }
@@ -93,6 +98,7 @@ header p { margin: 0; color: var(--muted); max-width: 62ch; }
 .tile.exp .cta { color: #0a7a4a; }
 .tile.xero .cta { color: #0b7eaa; }
 .tile.zoho .cta { color: var(--zoho); }
+.tile.concur .cta { color: var(--concur); }
 .panel {
   margin-top: 28px;
   background: #fff;
@@ -126,7 +132,7 @@ kbd {
 <div class="wrap">
   <header>
     <h1>Expense platform mockups</h1>
-    <p>Full-suite, clickable reconstructions of three competitor products. Each file is offline HTML. Switch role in the top bar (submitter, manager, finance) and walk the same Northwind Labs month of spend through each product.</p>
+    <p>Full-suite, clickable reconstructions of four competitor products. Each file is offline HTML. Switch role in the top bar (submitter, manager, finance) and walk the same Northwind Labs month of spend through each product.</p>
   </header>
   <p class="note">Unofficial internal review mockups. Layouts are original. Product names are used only to identify the suite being reconstructed. Open a file in a browser; nothing here is wired to Tinker HR.</p>
 
@@ -185,6 +191,24 @@ kbd {
         <span class="cta">Open Zoho Expense suite →</span>
       </div>
     </a>
+    <a class="tile concur" href="sap-concur.html">
+      <div class="tile-hero">
+        <div class="mark">C</div>
+        <h2>SAP Concur</h2>
+        <p>2025/26 web: left nav, Home, Request, Travel, Expense, Approvals, Processor, Joule.</p>
+      </div>
+      <div class="tile-body">
+        <h3>Walk through</h3>
+        <ul>
+          <li>Request → book travel in policy</li>
+          <li>ExpenseIt / Available Expenses → report</li>
+          <li>Exceptions: red stop, yellow warning</li>
+          <li>Manager approve or send back</li>
+          <li>AP process: Concur Pay ACH + S/4HANA extract</li>
+        </ul>
+        <span class="cta">Open SAP Concur suite →</span>
+      </div>
+    </a>
   </div>
 
   <section class="panel">
@@ -208,6 +232,7 @@ kbd {
           <th>Expensify</th>
           <th>Xero</th>
           <th>Zoho Expense</th>
+          <th>SAP Concur</th>
         </tr>
       </thead>
       <tbody>
@@ -216,36 +241,42 @@ kbd {
           <td>SmartScan, distance, split, time, chat drop</td>
           <td>Receipt on a claim line, bill upload</td>
           <td>Autoscan, mileage, per diem, card feed</td>
+          <td>ExpenseIt, card feed, e-receipts, travel itinerary</td>
         </tr>
         <tr>
           <td>Bundle</td>
           <td>Expense reports, optional pre-created reports</td>
           <td>Expense claim with GST lines</td>
           <td>Reports; trips can own expenses</td>
+          <td>Expense report, optionally created from an approved Request</td>
         </tr>
         <tr>
           <td>Approve</td>
           <td>Inbox chat + Reports to-dos, policy violations</td>
           <td>Awaiting review tab, then Awaiting payment</td>
           <td>Approvals module, multi-level policy flow</td>
+          <td>Manager Approve / Send Back, then AP processor</td>
         </tr>
         <tr>
           <td>Pay / rec</td>
           <td>ACH, Wallet, or pay outside (payroll). Spend → Ready to pay. QBO export.</td>
           <td>Bank / batch payment, or reimbursement pay item on a pay run via Expense claims clearing</td>
           <td>ACH, bank export, or Reimburse via Zoho Payroll</td>
+          <td>Concur Pay ACH for employee-paid; IBCP company card extract to S/4HANA</td>
         </tr>
         <tr>
           <td>Control</td>
           <td>Workspace Rules, category caps, merchant rules, delayed submission</td>
           <td>Expense settings, default accounts, one-level approval, tracking</td>
           <td>Multi-policy rules, category caps, per diem, custom approvals</td>
+          <td>Audit rules, expense types, hotel/meal caps, Request required over $500</td>
         </tr>
         <tr>
           <td>Travel</td>
           <td>Trips in Spend</td>
           <td>Not a travel desk — bills and claims only</td>
           <td>First-class Trips + booking status</td>
+          <td>Request (pre-spend) + Travel booking with in/out of policy</td>
         </tr>
       </tbody>
     </table>
