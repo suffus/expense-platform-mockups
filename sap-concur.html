@@ -58,7 +58,7 @@ a { color: inherit; }
 .main .seg button[aria-pressed="true"] { background: var(--blue-bg); color: var(--blue-deep); }
 .grow { margin-inline-start: auto; color: #9aa8b5; }
 
-.app { display: grid; grid-template-columns: var(--nav-w) 1fr; grid-template-rows: 48px 1fr; height: calc(100vh - 41px); background: var(--bg); }
+.app { display: grid; grid-template-columns: var(--nav-w) minmax(0, 1fr); grid-template-rows: 48px 1fr; height: calc(100vh - 41px); background: var(--bg); overflow: hidden; }
 .app.expanded { --nav-w: 220px; }
 .app.mobile { max-width: 390px; margin: 12px auto; height: calc(100vh - 65px); border: 1px solid #c7c7c7; border-radius: 8px; overflow: hidden; grid-template-columns: 1fr; grid-template-rows: 48px auto 1fr; }
 
@@ -76,7 +76,7 @@ a { color: inherit; }
 }
 .shell-search {
   margin-inline-start: 12px; display: flex; align-items: center; gap: 8px;
-  background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 10px; min-width: 220px; max-width: 360px; flex: 1;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 10px; min-width: 0; max-width: 360px; flex: 1;
 }
 .shell-search input { border: 0; background: transparent; outline: none; width: 100%; font-size: 13px; }
 .shell-tools { margin-inline-start: auto; display: flex; align-items: center; gap: 2px; }
@@ -115,9 +115,9 @@ a { color: inherit; }
 .side .spacer { flex: 1; }
 .app.mobile .side .spacer, .app.mobile .side .expand { display: none; }
 
-.main { grid-column: 2; overflow: auto; padding: 20px 28px 56px; }
+.main { grid-column: 2; min-width: 0; overflow: auto; padding: 20px 28px 56px; }
 .app.mobile .main { grid-column: 1; padding: 16px; }
-h1 { font-size: 22px; margin: 0 0 4px; font-weight: 700; }
+h1 { font-size: 22px; margin: 0 0 4px; font-weight: 700; overflow-wrap: break-word; }
 .lede { margin: 0 0 16px; color: var(--muted); font-size: 13px; }
 .spread { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .muted { color: var(--muted); }
@@ -137,7 +137,7 @@ h1 { font-size: 22px; margin: 0 0 4px; font-weight: 700; }
 .btn.warn { background: var(--warn); color: #fff; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; max-width: 100%; }
 .grid { display: grid; gap: 16px; }
 .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 .kpi { padding: 14px 16px; }
@@ -226,10 +226,14 @@ table.data tr.sel { background: var(--blue-bg); }
 .rpt-tile:hover { border-color: var(--blue); }
 .rpt-tile .amt { margin-inline-start: auto; font-weight: 700; }
 
-.field { display: grid; gap: 4px; margin-bottom: 12px; }
+.field { display: grid; gap: 4px; margin-bottom: 12px; min-width: 0; }
 .field label { font-size: 12px; font-weight: 650; }
-.field input, .field select, .field textarea { border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; background: #fff; }
-.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field input, .field select, .field textarea {
+  width: 100%; max-width: 100%; min-width: 0;
+  border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; background: #fff;
+}
+.two { display: flex; flex-wrap: wrap; gap: 12px; min-width: 0; }
+.two > .field { flex: 1 1 160px; min-width: 0; }
 
 .overlay { position: fixed; inset: 0; background: rgb(29 45 62 / 0.45); display: grid; place-items: center; z-index: 40; padding: 16px; }
 .dialog { background: #fff; width: min(100%, 640px); max-height: calc(100vh - 32px); overflow: auto; padding: 20px 22px; border-radius: 8px; }
@@ -877,7 +881,7 @@ table.data tr.sel { background: var(--blue-bg); }
 
   function renderPlanner() {
     return head('Pre-Spend Planner', 'Estimate a trip against policy before the Request. Not a booking.') +
-      '<div class="card" style="padding:16px;max-width:560px">' +
+      '<div class="card" style="padding:16px;width:100%;max-width:560px">' +
       '<div class="two"><div class="field"><label>City</label><input value="Lisbon"></div><div class="field"><label>Nights</label><input type="number" value="4"></div></div>' +
       '<div class="field"><label>Policy</label><div>US Sales · Hotel $250 · Meals $75 · Airfare $800</div></div>' +
       '<p><strong>Smart estimate $2,140</strong></p>' +
