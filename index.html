@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!-- Project tags (PROJECT_TAGS.md): @modhr/documentation @modhr/expenses @/ux-ui-quality -->
+<!--
+  Expense platform mockups hub.
+
+  Open this file in a browser. It is offline and self-contained.
+  Three unofficial full-suite reconstructions of competitor expense products,
+  using the same Northwind Labs sample company so the products can be compared.
+
+  These are original review layouts inspired by publicly documented product
+  structure. They are not affiliated with Expensify, Xero, or Zoho.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expense platform mockups</title>
+<style>
+:root {
+  --bg: #f4efe8;
+  --ink: #1f1b18;
+  --muted: #665d57;
+  --card: #fff;
+  --line: #e5dcd4;
+  --exp: #03d47c;
+  --exp-ink: #0c1b33;
+  --xero: #13b5ea;
+  --xero-ink: #1a3c57;
+  --zoho: #e42527;
+  --zoho-ink: #1a1a1a;
+  --radius: 14px;
+  --sans: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.45;
+}
+a { color: inherit; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 32px 24px 80px; }
+header h1 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.03em; }
+header p { margin: 0; color: var(--muted); max-width: 62ch; }
+.note {
+  margin: 20px 0 28px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 13px;
+}
+.grid { display: grid; gap: 16px; }
+@media (min-width: 860px) { .grid.three { grid-template-columns: repeat(3, 1fr); } }
+.tile {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  min-height: 100%;
+}
+.tile:hover { border-color: #c9bbb0; }
+.tile-hero { padding: 22px 20px 16px; color: #fff; min-height: 148px; }
+.tile.exp .tile-hero { background: var(--exp-ink); }
+.tile.xero .tile-hero { background: var(--xero-ink); }
+.tile.zoho .tile-hero { background: #1b1b1b; }
+.mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: grid; place-items: center;
+  font-weight: 700; margin-bottom: 14px;
+}
+.tile.exp .mark { background: var(--exp); color: var(--exp-ink); }
+.tile.xero .mark { background: var(--xero); color: #083247; }
+.tile.zoho .mark { background: var(--zoho); color: #fff; }
+.tile-hero h2 { margin: 0 0 6px; font-size: 20px; }
+.tile-hero p { margin: 0; opacity: 0.82; font-size: 13px; }
+.tile-body { padding: 16px 20px 20px; display: grid; gap: 10px; flex: 1; }
+.tile-body h3 { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.tile-body ul { margin: 0; padding: 0 0 0 16px; font-size: 13px; }
+.cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 13px;
+}
+.tile.exp .cta { color: #0a7a4a; }
+.tile.xero .cta { color: #0b7eaa; }
+.tile.zoho .cta { color: var(--zoho); }
+.panel {
+  margin-top: 28px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.panel h2 { margin: 0 0 8px; font-size: 18px; }
+.panel p { margin: 0 0 14px; color: var(--muted); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+.people { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.people li {
+  background: #faf6f0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 13px;
+}
+kbd {
+  font: 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: #faf6f0;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0 5px;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Expense platform mockups</h1>
+    <p>Full-suite, clickable reconstructions of three competitor products. Each file is offline HTML. Switch role in the top bar (submitter, manager, finance) and walk the same Northwind Labs month of spend through each product.</p>
+  </header>
+  <p class="note">Unofficial internal review mockups. Layouts are original. Product names are used only to identify the suite being reconstructed. Open a file in a browser; nothing here is wired to Tinker HR.</p>
+
+  <div class="grid three">
+    <a class="tile exp" href="expensify.html">
+      <div class="tile-hero">
+        <div class="mark">E</div>
+        <h2>Expensify</h2>
+        <p>New Expensify: Home, Inbox, Reports, Spend, Insights, chat-first Inbox.</p>
+      </div>
+      <div class="tile-body">
+        <h3>Walk through</h3>
+        <ul>
+          <li>Home to-dos and spend sparkline</li>
+          <li>Inbox report chat with approve in-thread</li>
+          <li>Reports table, violations, submit</li>
+          <li>SmartScan expense, distance, Expensify Card</li>
+          <li>Workspace Rules, distance rates, per diem, reimbursements (ACH / Wallet / payroll)</li>
+        </ul>
+        <span class="cta">Open Expensify suite →</span>
+      </div>
+    </a>
+    <a class="tile xero" href="xero.html">
+      <div class="tile-hero">
+        <div class="mark">X</div>
+        <h2>Xero</h2>
+        <p>Xero 2026: Home, Sales, Purchases, bank rec, expense claims, JAX.</p>
+      </div>
+      <div class="tile-body">
+        <h3>Walk through</h3>
+        <ul>
+          <li>Dashboard widgets for bank, bills, claims</li>
+          <li>Expense claims: draft → review → pay</li>
+          <li>Bills and purchase overview</li>
+          <li>Bank feeds with match / create / OK</li>
+          <li>Expense settings, payroll reimbursement via clearing account</li>
+        </ul>
+        <span class="cta">Open Xero suite →</span>
+      </div>
+    </a>
+    <a class="tile zoho" href="zoho-expense.html">
+      <div class="tile-hero">
+        <div class="mark">Z</div>
+        <h2>Zoho Expense</h2>
+        <p>My View, Admin View, and Setup: trips, cards, policies, analytics.</p>
+      </div>
+      <div class="tile-body">
+        <h3>Walk through</h3>
+        <ul>
+          <li>My View vs Admin View</li>
+          <li>Receipt → expense → report → reimburse</li>
+          <li>Trips, advances, corporate cards</li>
+          <li>Policy limits and violations</li>
+          <li>Policies, per diem, ACH / Payroll reimbursement</li>
+        </ul>
+        <span class="cta">Open Zoho Expense suite →</span>
+      </div>
+    </a>
+  </div>
+
+  <section class="panel">
+    <h2>Shared sample company</h2>
+    <p>Every suite uses the same people and November 2026 spend so a review can compare information architecture, not different stories.</p>
+    <ul class="people">
+      <li><strong>Maya Chen</strong> — Sales, submitter</li>
+      <li><strong>Jordan Hale</strong> — Manager, approver</li>
+      <li><strong>Priya Shah</strong> — Finance admin</li>
+      <li><strong>Alex Rivera</strong> — Engineering, cardholder</li>
+    </ul>
+    <p style="margin-top:14px">Headline items: Berlin customer week (Maya, submitted), Web Summit Lisbon (trip pending), AWS on the company card (Alex, unsubmitted), Kimpton hotel over the lodging cap, 82 miles SF–San Jose.</p>
+  </section>
+
+  <section class="panel">
+    <h2>What “full suite” covers</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Area</th>
+          <th>Expensify</th>
+          <th>Xero</th>
+          <th>Zoho Expense</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Capture</td>
+          <td>SmartScan, distance, split, time, chat drop</td>
+          <td>Receipt on a claim line, bill upload</td>
+          <td>Autoscan, mileage, per diem, card feed</td>
+        </tr>
+        <tr>
+          <td>Bundle</td>
+          <td>Expense reports, optional pre-created reports</td>
+          <td>Expense claim with GST lines</td>
+          <td>Reports; trips can own expenses</td>
+        </tr>
+        <tr>
+          <td>Approve</td>
+          <td>Inbox chat + Reports to-dos, policy violations</td>
+          <td>Awaiting review tab, then Awaiting payment</td>
+          <td>Approvals module, multi-level policy flow</td>
+        </tr>
+        <tr>
+          <td>Pay / rec</td>
+          <td>ACH, Wallet, or pay outside (payroll). Spend → Ready to pay. QBO export.</td>
+          <td>Bank / batch payment, or reimbursement pay item on a pay run via Expense claims clearing</td>
+          <td>ACH, bank export, or Reimburse via Zoho Payroll</td>
+        </tr>
+        <tr>
+          <td>Control</td>
+          <td>Workspace Rules, category caps, merchant rules, delayed submission</td>
+          <td>Expense settings, default accounts, one-level approval, tracking</td>
+          <td>Multi-policy rules, category caps, per diem, custom approvals</td>
+        </tr>
+        <tr>
+          <td>Travel</td>
+          <td>Trips in Spend</td>
+          <td>Not a travel desk — bills and claims only</td>
+          <td>First-class Trips + booking status</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>How to review</h2>
+    <p>Each suite has a sticky review bar that is not part of the product. Use role to see submitter, manager, and finance surfaces. Reset restores the sample month. <kbd>Esc</kbd> closes dialogs.</p>
+  </section>
+</div>
+</body>
+</html>

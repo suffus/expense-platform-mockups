@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<!-- Project tags (PROJECT_TAGS.md): @modhr/documentation @modhr/expenses @/ux-ui-quality -->
+<!--
+  Unofficial Zoho Expense full-suite review mockup.
+  Open in a browser. Offline, in-memory only. Hub: index.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zoho Expense — Northwind Labs (mockup)</title>
+<style>
+:root {
+  --red: #e42527;
+  --red-deep: #b51c1e;
+  --ink: #1d2329;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --bg: #f4f5f7;
+  --card: #fff;
+  --side: #fff;
+  --ok: #0f9d58;
+  --warn: #f5a623;
+  --blue: #1373e3;
+  --sans: "Segoe UI", Source Sans 3, Inter, ui-sans-serif, system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font-family: var(--sans); background: #f3f3f4; color: var(--ink); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+
+.review {
+  display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
+  padding: 8px 14px; background: #1a1a1a; color: #ddd; font-size: 12px;
+}
+.review strong { color: #ff8a8c; }
+.review a { color: #93c5fd; }
+.seg { display: inline-flex; border: 1px solid #333; border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: #aaa; padding: 5px 10px; }
+.seg button[aria-pressed="true"] { background: #2a2a2a; color: #fff; }
+.grow { margin-inline-start: auto; color: #888; }
+
+.shell { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: 52px 1fr; height: calc(100vh - 41px); background: var(--bg); }
+.shell.mobile { max-width: 390px; margin: 12px auto; height: calc(100vh - 65px); border-radius: 12px; overflow: hidden; grid-template-columns: 1fr; grid-template-rows: 52px auto 1fr; border: 1px solid #333; }
+.top {
+  grid-column: 1 / -1; background: #fff; border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 12px; padding: 0 16px;
+}
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 750; color: var(--red); }
+.brand i { width: 26px; height: 26px; border-radius: 6px; background: var(--red); color: #fff; display: grid; place-items: center; font-style: normal; font-size: 14px; }
+.searchbar { flex: 1; max-width: 420px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; background: #fafafa; }
+.searchbar input { border: 0; background: transparent; outline: none; width: 100%; font-size: 13px; }
+.tools { margin-inline-start: auto; display: flex; align-items: center; gap: 8px; }
+.tools button { border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 6px 10px; font-size: 12px; }
+.org { font-size: 13px; color: var(--muted); }
+.view-switch { display: grid; gap: 2px; padding: 10px 8px 4px; border-top: 1px solid var(--line); margin-top: auto; }
+.view-switch button { text-align: left; border: 0; background: transparent; padding: 7px 10px; border-radius: 4px; font-size: 12px; color: #374151; width: 100%; border-left: 0; }
+.view-switch button[aria-pressed="true"] { background: #fdecec; color: var(--red); font-weight: 650; }
+.plus-mod { margin-inline-start: auto; border: 0; background: transparent; color: var(--red); font-weight: 700; padding: 0 4px; }
+
+.side { background: var(--side); border-right: 1px solid var(--line); padding: 8px 8px 12px; overflow: auto; display: flex; flex-direction: column; }
+.side button {
+  display: flex; width: 100%; text-align: left; gap: 8px; align-items: center;
+  border: 0; background: transparent; padding: 8px 10px; border-radius: 0; color: #374151;
+  border-left: 3px solid transparent;
+}
+.side button[aria-current="page"] { background: #fff5f5; color: var(--red); font-weight: 650; border-left-color: var(--red); }
+.side .grp { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 12px 10px 4px; }
+.shell.mobile .side { display: flex; flex-direction: row; gap: 4px; overflow: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 8px; }
+.shell.mobile .side .grp { display: none; }
+.shell.mobile .side button { width: auto; white-space: nowrap; }
+.shell.mobile .view-switch { margin-top: 0; border-top: 0; display: flex; flex: none; }
+
+.main { overflow: auto; padding: 20px 24px 56px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 13px; }
+.spread { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.grid { display: grid; gap: 16px; }
+.kpis { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.kpi { padding: 14px 16px; }
+.kpi .lbl { font-size: 12px; color: var(--muted); }
+.kpi .val { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; }
+.muted { color: var(--muted); }
+.tiny { font-size: 12px; }
+.money { font-variant-numeric: tabular-nums; font-weight: 650; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; border: 1px solid transparent;
+  padding: 7px 12px; font-size: 13px; font-weight: 650; background: transparent;
+}
+.btn.red { background: var(--red); color: #fff; }
+.btn.ghost { border-color: var(--line); background: #fff; }
+.btn.ok { background: var(--ok); color: #fff; }
+.btn.danger { background: var(--red-deep); color: #fff; }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.data th { text-align: left; font-size: 11px; color: var(--muted); font-weight: 650; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+table.data td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+table.data tr.click { cursor: pointer; }
+table.data tr.click:hover { background: #fafafa; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.chip { display: inline-flex; align-items: center; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 650; background: #f3f4f6; }
+.chip.ok { background: #e7f8ef; color: #0a7a40; }
+.chip.warn { background: #fff6e0; color: #8a5a12; }
+.chip.bad { background: #fdecea; color: var(--red); }
+.chip.info { background: #e8f1fc; color: var(--blue); }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); padding: 0 8px; }
+.tabs button { border: 0; background: transparent; padding: 10px 12px; color: var(--muted); }
+.tabs button[aria-selected="true"] { color: var(--red); box-shadow: inset 0 -2px 0 var(--red); font-weight: 650; }
+
+.bars { display: flex; align-items: flex-end; gap: 8px; height: 110px; }
+.bars i { flex: 1; background: var(--red); border-radius: 4px 4px 0 0; display: block; opacity: 0.85; }
+.side2 { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 16px; align-items: start; }
+.field { display: grid; gap: 4px; margin-bottom: 10px; }
+.field label { font-size: 12px; font-weight: 650; }
+.field input, .field select, .field textarea { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
+.overlay { position: fixed; inset: 0; background: rgb(0 0 0 / 0.4); display: grid; place-items: center; z-index: 40; padding: 16px; }
+.dialog { background: #fff; width: min(100%, 560px); max-height: calc(100vh - 32px); overflow: auto; padding: 20px; border-radius: 12px; }
+.receipt { height: 140px; border: 1px dashed var(--line); border-radius: 8px; display: grid; place-items: center; color: var(--muted); font-size: 12px; background: repeating-linear-gradient(45deg,#fafafa,#fafafa 8px,#f3f4f6 8px,#f3f4f6 16px); }
+.receipt.ok { background: #fff; border-style: solid; color: var(--ink); }
+.toast { background: #e7f8ef; border: 1px solid #b7e4c7; padding: 8px 12px; border-radius: 8px; }
+.warnbox { background: #fff6e0; border: 1px solid #f3d7a3; padding: 10px 12px; border-radius: 8px; color: #8a5a12; font-size: 13px; }
+.progress { height: 8px; background: #eee; border-radius: 99px; overflow: hidden; }
+.progress > i { display: block; height: 100%; background: var(--red); }
+.progress.ok > i { background: var(--ok); }
+.progress.warn > i { background: var(--warn); }
+.sw { display: inline-flex; width: 36px; height: 20px; border-radius: 99px; background: var(--ok); position: relative; vertical-align: middle; }
+.sw::after { content: ""; position: absolute; width: 16px; height: 16px; background: #fff; border-radius: 50%; top: 2px; right: 2px; }
+.sw.off { background: #c5c9ce; }
+.sw.off::after { right: auto; left: 2px; }
+.rule { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.payopt { display: block; width: 100%; text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 12px 14px; margin-bottom: 8px; }
+.payopt:hover { border-color: var(--red); }
+
+@media (max-width: 900px) { .side2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="review">
+  <strong>Review mockup</strong>
+  <span>Zoho Expense suite</span>
+  <a href="index.html">All platforms</a>
+  <span>Role</span>
+  <div class="seg" id="roleSeg"></div>
+  <span>Viewport</span>
+  <div class="seg" id="vpSeg"></div>
+  <button class="btn ghost" id="resetBtn" type="button">Reset data</button>
+  <span class="grow">Unofficial reconstruction · Northwind Labs · Nov 2026</span>
+</div>
+<div class="shell" id="shell">
+  <header class="top">
+    <div class="brand"><i>Z</i> Expense</div>
+    <label class="searchbar"><span class="sr-only" style="display:none">Search</span><input placeholder="Search merchant, report, trip…"></label>
+    <div class="tools">
+      <button type="button" title="Zia">Zia</button>
+      <button type="button">Alerts</button>
+      <button type="button" id="setupGear" title="Setup">⚙</button>
+      <span class="org">Northwind Labs</span>
+    </div>
+  </header>
+  <nav class="side" id="side"></nav>
+  <main class="main" id="main"></main>
+</div>
+<div id="modal"></div>
+<script>
+(function () {
+  var PEOPLE = {
+    maya: { name: 'Maya Chen', role: 'Submitter' },
+    jordan: { name: 'Jordan Hale', role: 'Approver' },
+    priya: { name: 'Priya Shah', role: 'Admin' },
+    alex: { name: 'Alex Rivera', role: 'Submitter' }
+  };
+  var CATS = ['Airfare', 'Lodging', 'Meals', 'Mileage', 'Software', 'Training', 'Taxi', 'Per Diem'];
+  function seed() {
+    return {
+      expenses: [
+        { id: 'x1', user: 'maya', date: '2026-11-10', merchant: 'Uber', cat: 'Taxi', amount: 48.20, report: 'p1', trip: 't1', receipt: true, policy: null },
+        { id: 'x2', user: 'maya', date: '2026-11-11', merchant: 'Kimpton De Witt', cat: 'Lodging', amount: 312.00, report: 'p1', trip: 't1', receipt: true, policy: 'Lodging exceeds $250 / night' },
+        { id: 'x3', user: 'maya', date: '2026-11-12', merchant: 'Cafe De Reiger', cat: 'Meals', amount: 86.40, report: 'p1', trip: 't1', receipt: true, policy: 'Meal over $75 without client note' },
+        { id: 'x4', user: 'maya', date: '2026-11-04', merchant: 'Mileage SF–SJC', cat: 'Mileage', amount: 54.94, report: 'p1', trip: null, receipt: false, miles: 82 },
+        { id: 'x5', user: 'maya', date: '2026-11-18', merchant: 'Web Summit', cat: 'Training', amount: 890.00, report: 'p2', trip: 't2', receipt: true, policy: null },
+        { id: 'x6', user: 'maya', date: '2026-11-20', merchant: 'TAP Air Portugal', cat: 'Airfare', amount: 642.00, report: null, trip: 't2', receipt: true, policy: null },
+        { id: 'x7', user: 'alex', date: '2026-11-03', merchant: 'Amazon Web Services', cat: 'Software', amount: 1240.00, report: null, trip: null, receipt: true, card: true, policy: null },
+        { id: 'x8', user: 'alex', date: '2026-11-01', merchant: 'Adobe', cat: 'Software', amount: 59.99, report: null, trip: null, receipt: false, card: true, policy: null },
+        { id: 'x9', user: 'maya', date: '2026-11-24', merchant: 'Pret A Manger', cat: '', amount: 14.80, report: null, trip: null, receipt: true, scan: true, policy: null }
+      ],
+      reports: [
+        { id: 'p1', name: 'Berlin customer week', user: 'maya', status: 'submitted', total: 501.54, trip: 't1', approver: 'jordan' },
+        { id: 'p2', name: 'Q4 conference', user: 'maya', status: 'approved', total: 890.00, trip: 't2', approver: 'jordan' },
+        { id: 'p3', name: 'November tools', user: 'alex', status: 'draft', total: 0, trip: null, approver: 'jordan' }
+      ],
+      trips: [
+        { id: 't1', name: 'Berlin customer week', user: 'maya', start: '2026-11-10', end: '2026-11-14', city: 'Berlin', status: 'closed', budget: 1800, spent: 1143.54 },
+        { id: 't2', name: 'Web Summit Lisbon', user: 'maya', start: '2026-12-01', end: '2026-12-05', city: 'Lisbon', status: 'approved', budget: 2500, spent: 1532.00 },
+        { id: 't3', name: 'NYC pipeline', user: 'maya', start: '2026-12-14', end: '2026-12-16', city: 'New York', status: 'pending', budget: 1200, spent: 0 }
+      ],
+      advances: [
+        { id: 'a1', user: 'maya', amount: 400, status: 'approved', trip: 't2', applied: 0 },
+        { id: 'a2', user: 'maya', amount: 200, status: 'pending', trip: 't3', applied: 0 }
+      ],
+      cards: [
+        { id: 'k1', holder: 'alex', last4: '8821', unreported: 2, spend: 1299.99 },
+        { id: 'k2', holder: 'maya', last4: '4410', unreported: 0, spend: 48.20 }
+      ],
+      budgets: [
+        { name: 'Sales travel Q4', cap: 12000, spent: 8640, owner: 'Jordan Hale' },
+        { name: 'Engineering tools', cap: 4000, spent: 1299.99, owner: 'Priya Shah' },
+        { name: 'Training', cap: 3000, spent: 890, owner: 'Priya Shah' }
+      ],
+      policies: [
+        { id: 'default', name: 'Default', users: 'Engineering, Finance, All others', lodging: 250, meals: 75, mileage: 0.67, receipt: 25, uncategorized: 'block', duplicates: 'warn', action: 'warn' },
+        { id: 'sales', name: 'Sales', users: 'Maya Chen', lodging: 320, meals: 100, mileage: 0.67, receipt: 25, uncategorized: 'warn', duplicates: 'warn', action: 'warn' }
+      ],
+      perDiems: [
+        { dest: 'United States · default', amount: 79, hours: '100% after 12h' },
+        { dest: 'Berlin, DE', amount: 128, hours: '75% under 12h' },
+        { dest: 'Lisbon, PT', amount: 112, hours: '75% under 12h' }
+      ]
+    };
+  }
+
+  var S = { role: 'maya', mode: 'my', view: 'home', vp: 'wide', tab: 'all', selected: null, selectedPolicy: 'sales', toast: '', data: seed() };
+
+  var MY_NAV = [
+    ['home', 'Home'], ['expenses', 'Expenses'], ['reports', 'Reports'], ['trips', 'Trips'],
+    ['advances', 'Advances'], ['cards', 'Cards'], ['purchases', 'Purchase Requests'], ['approvals', 'Approvals']
+  ];
+  var ADMIN_NAV = [
+    ['home', 'Dashboard'], ['reports', 'Reports'], ['trips', 'Trips'], ['advances', 'Advances'],
+    ['purchases', 'Purchase Requests'], ['cards', 'Corporate Cards'], ['reimbursements', 'Reimbursements'],
+    ['budgets', 'Budgets'], ['analytics', 'Analytics']
+  ];
+  var SETUP_NAV = [
+    ['org', 'Organization'], ['users', 'Users'], ['policies', 'Policies'], ['categories', 'Categories'],
+    ['mileage', 'Mileage'], ['perdiem', 'Per diem'], ['approvals-setup', 'Approvals'],
+    ['payments', 'Payments'], ['integrations', 'Integrations']
+  ];
+  var QUICK = { expenses: 'expense', reports: 'report', trips: 'trip', advances: 'advance' };
+
+  function $(id) { return document.getElementById(id); }
+  function money(n) { return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmt(d) { if (!d) return '—'; var p = d.split('-'); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1] + ' ' + (+p[2]); }
+  function st(s) {
+    var m = { draft: ['Draft',''], submitted: ['Submitted','info'], approved: ['Approved','ok'], reimbursed: ['Reimbursed','ok'], rejected: ['Rejected','bad'], pending: ['Pending','warn'], closed: ['Closed',''], awaiting: ['Awaiting','info'], payroll: ['Awaiting reimbursement via Payroll','warn'] };
+    var x = m[s] || [s, ''];
+    return '<span class="chip ' + x[1] + '">' + x[0] + '</span>';
+  }
+  function mine(list) {
+    if (S.mode === 'admin') return list;
+    if (S.view === 'approvals' && S.role === 'jordan') return list;
+    return list.filter(function (x) { return x.user === S.role || x.holder === S.role; });
+  }
+  function go(view, extra) { S.view = view; if (extra) Object.keys(extra).forEach(function (k) { S[k] = extra[k]; }); render(); }
+  function toast(m) { S.toast = m; render(); setTimeout(function () { if (S.toast === m) { S.toast = ''; render(); } }, 2200); }
+  function canAdmin() { return S.role === 'priya' || S.role === 'jordan'; }
+
+  function renderChrome() {
+    $('shell').className = 'shell' + (S.vp === 'mobile' ? ' mobile' : '');
+    document.querySelector('.org').textContent = 'Northwind Labs · USD · ' + PEOPLE[S.role].name;
+    if (! $('roleSeg').dataset.ready) {
+      [['maya','Maya · submitter'],['jordan','Jordan · approver'],['priya','Priya · admin']].forEach(function (r) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = r[1]; b.dataset.role = r[0];
+        b.addEventListener('click', function () {
+          S.role = r[0];
+          if (r[0] === 'maya') S.mode = 'my';
+          if (r[0] === 'priya') S.mode = 'admin';
+          var nav = S.mode === 'setup' ? SETUP_NAV : (S.mode === 'admin' ? ADMIN_NAV : MY_NAV);
+          if (!nav.some(function (n) { return n[0] === S.view; })) S.view = S.mode === 'setup' ? 'policies' : 'home';
+          render();
+        });
+        $('roleSeg').append(b);
+      });
+      [['wide','Desktop'],['mobile','Mobile']].forEach(function (v) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = v[1]; b.dataset.vp = v[0];
+        b.addEventListener('click', function () { S.vp = v[0]; render(); });
+        $('vpSeg').append(b);
+      });
+      $('resetBtn').addEventListener('click', function () { S.data = seed(); toast('Sample month restored'); });
+      $('setupGear').addEventListener('click', function () {
+        if (S.role !== 'priya') { toast('Setup is an admin role'); return; }
+        S.mode = 'setup'; S.view = 'policies'; render();
+      });
+      $('roleSeg').dataset.ready = '1';
+    }
+    $('roleSeg').querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.role === S.role ? 'true' : 'false'); });
+    $('vpSeg').querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.vp === S.vp ? 'true' : 'false'); });
+    var nav = S.mode === 'setup' ? SETUP_NAV : (S.mode === 'admin' ? ADMIN_NAV : MY_NAV);
+    if (S.role === 'maya') nav = nav.filter(function (n) { return n[0] !== 'approvals'; });
+    var modes = '<div class="view-switch">' +
+      '<button type="button" data-mode="my" aria-pressed="' + (S.mode === 'my') + '">My View</button>' +
+      (canAdmin() ? '<button type="button" data-mode="admin" aria-pressed="' + (S.mode === 'admin') + '">Admin View</button>' : '') +
+      (S.role === 'priya' ? '<button type="button" data-mode="setup" aria-pressed="' + (S.mode === 'setup') + '">Setup</button>' : '') +
+      '</div>';
+    $('side').innerHTML = nav.map(function (n) {
+      var plus = QUICK[n[0]] ? '<span class="plus-mod" data-create="' + QUICK[n[0]] + '">+</span>' : '';
+      return '<button type="button" data-go="' + n[0] + '"' + (S.view === n[0] ? ' aria-current="page"' : '') + '>' + n[1] + plus + '</button>';
+    }).join('') + modes;
+    $('side').querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function (e) { if (e.target.closest('[data-create]')) return; go(b.getAttribute('data-go')); }); });
+    $('side').querySelectorAll('[data-create]').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); openCreate(b.getAttribute('data-create')); }); });
+    $('side').querySelectorAll('[data-mode]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var m = b.getAttribute('data-mode');
+        if (m !== 'my' && !canAdmin()) { toast('Admin and Setup need an approver or admin role'); return; }
+        if (m === 'setup' && S.role !== 'priya') { toast('Setup is an admin role'); return; }
+        S.mode = m; S.view = m === 'setup' ? 'policies' : 'home'; render();
+      });
+    });
+  }
+
+  function renderHome() {
+    var ex = mine(S.data.expenses);
+    var unsub = ex.filter(function (e) { return !e.report; });
+    var pendingRep = S.data.reports.filter(function (r) { return r.status === 'submitted'; });
+    var spend = [2.1, 3.4, 2.8, 6.2, 4.1, 3.3];
+    if (S.mode === 'admin') {
+      return head('Dashboard', 'Organisation spend, queues, and policy pressure.') +
+        kpis([['Total Expenses', money(3348)],['Advances', money(600)],['Reimbursements', money(214.10)],['Total Trips', '3']]) +
+        '<div class="side2"><div class="card" style="padding:16px"><h2 style="margin:0 0 8px;font-size:15px">Spend summary</h2><div class="bars">' +
+        spend.map(function (n) { return '<i style="height:' + (n / 6.5 * 100) + '%"></i>'; }).join('') + '</div><div class="tiny muted">Jun–Nov approved and reimbursed</div></div>' +
+        '<div class="card"><div style="padding:12px 16px;font-weight:650">Pending reports</div>' +
+        pendingRep.map(function (r) { return '<button class="spread" style="width:100%;padding:10px 16px;border:0;border-top:1px solid var(--line);background:transparent;text-align:left" data-rep="' + r.id + '"><span>' + r.name + '<div class="tiny muted">' + PEOPLE[r.user].name + ' → ' + PEOPLE[r.approver].name + '</div></span><span class="money">' + money(r.total) + '</span></button>'; }).join('') +
+        '</div></div>' +
+        '<div class="card" style="margin-top:16px"><div style="padding:12px 16px;font-weight:650">Top policy violations</div>' +
+        S.data.expenses.filter(function (e) { return e.policy; }).map(function (e) { return '<div class="spread" style="padding:10px 16px;border-top:1px solid var(--line)"><div>' + e.merchant + '<div class="tiny muted">' + e.policy + '</div></div><span class="chip warn">Flag</span></div>'; }).join('') + '</div>';
+    }
+    return head('Home', 'Your unsubmitted expenses, trips, and advances.') +
+      (S.toast ? '<div class="toast" style="margin-bottom:12px">' + S.toast + '</div>' : '') +
+      kpis([['Unreported', unsub.length],['Awaiting approval', pendingRep.filter(function (r) { return r.user === S.role; }).length],['Advance on hand', money(S.data.advances.filter(function (a) { return a.user === S.role && a.status === 'approved'; }).reduce(function (s,a) { return s + a.amount; }, 0))],['Next trip', 'Lisbon 1 Dec']]) +
+      '<div class="card"><div class="spread" style="padding:12px 16px"><strong>Unsubmitted expenses</strong><button class="btn red" data-create="expense">Record expense</button></div>' +
+      (unsub.length ? '<table class="data"><tbody>' + unsub.map(function (e) {
+        return '<tr class="click" data-exp="' + e.id + '"><td>' + fmt(e.date) + '</td><td>' + e.merchant + (e.scan ? ' <span class="chip warn">Autoscan</span>' : '') + (e.card ? ' <span class="chip info">Card</span>' : '') + '</td><td>' + (e.cat || 'Uncategorised') + '</td><td class="num">' + money(e.amount) + '</td></tr>';
+      }).join('') + '</tbody></table>' : '<p class="muted" style="padding:16px">Nothing waiting.</p>') + '</div>';
+  }
+
+  function head(t, l) { return '<h1>' + t + '</h1><p class="lede">' + l + '</p>'; }
+  function kpis(items) {
+    return '<div class="grid kpis" style="margin-bottom:16px">' + items.map(function (i) { return '<div class="card kpi"><div class="lbl">' + i[0] + '</div><div class="val">' + i[1] + '</div></div>'; }).join('') + '</div>';
+  }
+
+  function renderExpenses() {
+    var rows = mine(S.data.expenses);
+    return '<div class="spread">' + head('Expenses', 'Receipts, mileage, per diem, and card transactions before they join a report.') +
+      '<button class="btn red" data-create="expense">New expense</button></div>' +
+      '<div class="card"><table class="data"><thead><tr><th>Date</th><th>Merchant</th><th>Category</th><th>Report</th><th></th><th class="num">Amount</th></tr></thead><tbody>' +
+      rows.map(function (e) {
+        var r = S.data.reports.find(function (p) { return p.id === e.report; });
+        return '<tr class="click" data-exp="' + e.id + '"><td>' + fmt(e.date) + '</td><td>' + e.merchant + '</td><td>' + (e.cat || '—') + '</td><td>' + (r ? r.name : '<span class="chip warn">Unreported</span>') + '</td><td>' + (e.policy ? '<span class="chip warn">Violation</span>' : '') + (e.receipt ? '<span class="chip">Receipt</span>' : '') + '</td><td class="num">' + money(e.amount) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function renderExpense() {
+    var e = S.data.expenses.find(function (x) { return x.id === S.selected; });
+    if (!e) return '<p>Missing.</p>';
+    return '<button class="btn ghost" data-go="expenses">Expenses</button>' +
+      '<div class="side2" style="margin-top:12px"><div class="card" style="padding:16px"><div class="spread"><div><h1 style="font-size:20px">' + e.merchant + '</h1><p class="lede">' + PEOPLE[e.user].name + ' · ' + fmt(e.date) + '</p></div><div class="val" style="font-size:24px;font-weight:700">' + money(e.amount) + '</div></div>' +
+      '<div class="grid" style="grid-template-columns:1fr 1fr;margin-top:12px"><div class="field"><label>Category</label><div>' + (e.cat || 'Uncategorised') + '</div></div><div class="field"><label>Trip</label><div>' + (e.trip ? S.data.trips.find(function (t) { return t.id === e.trip; }).name : '—') + '</div></div></div>' +
+      (e.policy ? '<div class="warnbox" style="margin-top:12px">' + e.policy + ' · Sales policy still flags this until Jordan approves with a reason.</div>' : '') +
+      (!e.report && S.role === e.user ? '<button class="btn red" style="margin-top:12px" data-act="addrep" data-id="' + e.id + '">Add to a report</button>' : '') +
+      '</div><div class="receipt ' + (e.receipt ? 'ok' : '') + '">' + (e.receipt ? 'Autoscan receipt<br>' + e.merchant + '<br>' + money(e.amount) : 'No receipt') + '</div></div>';
+  }
+
+  function renderReports() {
+    var rows = mine(S.data.reports);
+    return '<div class="spread">' + head('Reports', 'A report is the bundle that is submitted, approved, and reimbursed.') +
+      (S.mode === 'my' ? '<button class="btn red" data-create="report">New report</button>' : '') + '</div>' +
+      '<div class="card"><table class="data"><thead><tr><th>Report</th><th>User</th><th>Status</th><th>Trip</th><th class="num">Total</th></tr></thead><tbody>' +
+      rows.map(function (r) {
+        var t = S.data.trips.find(function (x) { return x.id === r.trip; });
+        return '<tr class="click" data-rep="' + r.id + '"><td>' + r.name + '</td><td>' + PEOPLE[r.user].name + '</td><td>' + st(r.status) + '</td><td>' + (t ? t.name : '—') + '</td><td class="num">' + money(r.total) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function renderReport() {
+    var r = S.data.reports.find(function (x) { return x.id === S.selected; });
+    if (!r) return '<p>Missing.</p>';
+    var ex = S.data.expenses.filter(function (e) { return e.report === r.id; });
+    var flags = ex.filter(function (e) { return e.policy; });
+    var actions = '';
+    if (S.role === r.user && r.status === 'draft') actions = '<button class="btn red" data-act="submit" data-id="' + r.id + '">Submit</button>';
+    if ((S.role === 'jordan' || S.role === 'priya') && r.status === 'submitted') actions = '<button class="btn ok" data-act="approve" data-id="' + r.id + '">Approve</button><button class="btn danger" data-act="reject" data-id="' + r.id + '">Reject</button>';
+    if (S.role === 'priya' && (r.status === 'approved' || r.status === 'payroll')) actions = '<button class="btn red" data-act="reimburse" data-id="' + r.id + '">Reimburse</button>';
+    return '<button class="btn ghost" data-go="reports">Reports</button>' +
+      '<div class="spread" style="margin:12px 0"><div><h1>' + r.name + '</h1><p class="lede">' + PEOPLE[r.user].name + ' · ' + st(r.status) + '</p></div><div class="row" style="display:flex;gap:8px">' + actions + '<div style="font-size:22px;font-weight:700">' + money(r.total) + '</div></div></div>' +
+      (flags.length ? '<div class="warnbox" style="margin-bottom:12px">' + flags.length + ' policy violation' + (flags.length > 1 ? 's' : '') + ' on this report.</div>' : '') +
+      '<div class="card"><table class="data"><thead><tr><th>Date</th><th>Merchant</th><th>Category</th><th></th><th class="num">Amount</th></tr></thead><tbody>' +
+      ex.map(function (e) { return '<tr class="click" data-exp="' + e.id + '"><td>' + fmt(e.date) + '</td><td>' + e.merchant + '</td><td>' + e.cat + '</td><td>' + (e.policy ? '<span class="chip warn">Flag</span>' : '') + '</td><td class="num">' + money(e.amount) + '</td></tr>'; }).join('') +
+      '</tbody></table></div>';
+  }
+
+  function renderTrips() {
+    var rows = mine(S.data.trips);
+    return '<div class="spread">' + head('Trips', 'Request travel first. Approved trips can own expenses and advances.') +
+      (S.mode === 'my' ? '<button class="btn red" data-create="trip">New trip</button>' : '') + '</div>' +
+      '<div class="card"><table class="data"><thead><tr><th>Trip</th><th>User</th><th>Dates</th><th>Status</th><th>Budget</th></tr></thead><tbody>' +
+      rows.map(function (t) {
+        var pct = Math.round((t.spent / t.budget) * 100);
+        return '<tr class="click" data-trip="' + t.id + '"><td>' + t.name + '<div class="tiny muted">' + t.city + '</div></td><td>' + PEOPLE[t.user].name + '</td><td>' + fmt(t.start) + ' – ' + fmt(t.end) + '</td><td>' + st(t.status) + '</td><td><div class="tiny">' + money(t.spent) + ' / ' + money(t.budget) + '</div><div class="progress ' + (pct > 90 ? 'warn' : 'ok') + '"><i style="width:' + Math.min(pct,100) + '%"></i></div></td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function renderTrip() {
+    var t = S.data.trips.find(function (x) { return x.id === S.selected; });
+    if (!t) return '<p>Missing.</p>';
+    var ex = S.data.expenses.filter(function (e) { return e.trip === t.id; });
+    var actions = '';
+    if ((S.role === 'jordan' || S.role === 'priya') && t.status === 'pending') actions = '<button class="btn ok" data-act="tripok" data-id="' + t.id + '">Approve trip</button>';
+    return '<button class="btn ghost" data-go="trips">Trips</button>' +
+      '<div class="spread" style="margin:12px 0"><div><h1>' + t.name + '</h1><p class="lede">' + t.city + ' · ' + fmt(t.start) + ' – ' + fmt(t.end) + ' · ' + st(t.status) + '</p></div>' + actions + '</div>' +
+      '<div class="card"><table class="data"><thead><tr><th>Linked expenses</th><th class="num">Amount</th></tr></thead><tbody>' +
+      (ex.length ? ex.map(function (e) { return '<tr class="click" data-exp="' + e.id + '"><td>' + e.merchant + '</td><td class="num">' + money(e.amount) + '</td></tr>'; }).join('') : '<tr><td colspan="2" class="muted">No expenses linked yet.</td></tr>') +
+      '</tbody></table></div>';
+  }
+
+  function renderAdvances() {
+    var rows = mine(S.data.advances);
+    return head('Advances', 'Cash issued before a trip, applied when the report is reimbursed.') +
+      '<div class="card"><table class="data"><thead><tr><th>User</th><th>Trip</th><th>Status</th><th class="num">Amount</th></tr></thead><tbody>' +
+      rows.map(function (a) {
+        var t = S.data.trips.find(function (x) { return x.id === a.trip; });
+        var act = (S.role === 'jordan' || S.role === 'priya') && a.status === 'pending' ? '<button class="btn ok" data-act="advok" data-id="' + a.id + '">Approve</button>' : '';
+        return '<tr><td>' + PEOPLE[a.user].name + '</td><td>' + (t ? t.name : '—') + '</td><td>' + st(a.status) + ' ' + act + '</td><td class="num">' + money(a.amount) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function renderCards() {
+    return head('Corporate cards', 'Feeds land here. Convert a transaction to an expense, then add it to a report.') +
+      '<div class="grid kpis">' + S.data.cards.map(function (c) {
+        return '<div class="card kpi"><div class="lbl">' + PEOPLE[c.holder].name + ' · ••' + c.last4 + '</div><div class="val">' + money(c.spend) + '</div><div class="tiny muted">' + c.unreported + ' unreported</div></div>';
+      }).join('') + '</div>' +
+      '<div class="card" style="margin-top:16px"><table class="data"><thead><tr><th>Date</th><th>Merchant</th><th>Holder</th><th></th><th class="num">Amount</th></tr></thead><tbody>' +
+      S.data.expenses.filter(function (e) { return e.card; }).map(function (e) {
+        return '<tr class="click" data-exp="' + e.id + '"><td>' + fmt(e.date) + '</td><td>' + e.merchant + '</td><td>' + PEOPLE[e.user].name + '</td><td>' + (e.report ? 'On report' : '<span class="chip warn">Convert to expense</span>') + '</td><td class="num">' + money(e.amount) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function renderApprovals() {
+    if (S.role === 'maya') return '<p>Switch to Jordan or Priya to see the queue.</p>';
+    var reps = S.data.reports.filter(function (r) { return r.status === 'submitted'; });
+    var trips = S.data.trips.filter(function (t) { return t.status === 'pending'; });
+    return head('Approvals', 'Reports, trips, and advances waiting on you.') +
+      '<div class="card"><div style="padding:12px 16px;font-weight:650">Reports</div>' +
+      (reps.length ? reps.map(function (r) {
+        return '<div class="spread" style="padding:10px 16px;border-top:1px solid var(--line)"><div>' + r.name + '<div class="tiny muted">' + PEOPLE[r.user].name + '</div></div><div style="display:flex;gap:8px"><button class="btn ghost" data-rep="' + r.id + '">Open</button><button class="btn ok" data-act="approve" data-id="' + r.id + '">Approve</button></div></div>';
+      }).join('') : '<p class="muted" style="padding:16px">No reports waiting.</p>') + '</div>' +
+      '<div class="card" style="margin-top:16px"><div style="padding:12px 16px;font-weight:650">Trips</div>' +
+      trips.map(function (t) {
+        return '<div class="spread" style="padding:10px 16px;border-top:1px solid var(--line)"><div>' + t.name + '<div class="tiny muted">' + PEOPLE[t.user].name + ' · ' + t.city + '</div></div><button class="btn ok" data-act="tripok" data-id="' + t.id + '">Approve</button></div>';
+      }).join('') + '</div>';
+  }
+
+  function renderAnalytics() {
+    var byCat = {};
+    S.data.expenses.forEach(function (e) { var k = e.cat || 'Uncategorised'; byCat[k] = (byCat[k] || 0) + e.amount; });
+    var max = Math.max.apply(null, Object.keys(byCat).map(function (k) { return byCat[k]; }));
+    return head('Analytics', 'Approved and reimbursed only in the live product; this mockup includes the sample month.') +
+      '<div class="side2"><div class="card" style="padding:16px"><h2 style="font-size:15px;margin:0 0 12px">Expenses by category</h2>' +
+      Object.keys(byCat).map(function (k) {
+        return '<div style="margin-bottom:8px"><div class="spread tiny"><span>' + k + '</span><span>' + money(byCat[k]) + '</span></div><div class="progress"><i style="width:' + (byCat[k] / max * 100) + '%"></i></div></div>';
+      }).join('') + '</div>' +
+      '<div class="card" style="padding:16px"><h2 style="font-size:15px;margin:0 0 12px">By user</h2>' +
+      ['maya','alex'].map(function (u) {
+        var s = S.data.expenses.filter(function (e) { return e.user === u; }).reduce(function (n,e) { return n + e.amount; }, 0);
+        return '<div class="spread" style="padding:8px 0"><span>' + PEOPLE[u].name + '</span><span class="money">' + money(s) + '</span></div>';
+      }).join('') +
+      '<p class="tiny muted" style="margin-top:12px">Also available: policy violations, mileage by user, reimbursements, trip stage, card reconciliation.</p></div></div>';
+  }
+
+  function renderBudgets() {
+    return head('Budgets', 'Compare actuals against a cap per team or category.') +
+      S.data.budgets.map(function (b) {
+        var pct = Math.round(b.spent / b.cap * 100);
+        return '<div class="card" style="padding:14px 16px;margin-bottom:10px"><div class="spread"><strong>' + b.name + '</strong><span>' + money(b.spent) + ' / ' + money(b.cap) + '</span></div><div class="progress ' + (pct > 80 ? 'warn' : 'ok') + '" style="margin-top:8px"><i style="width:' + pct + '%"></i></div><div class="tiny muted" style="margin-top:6px">' + b.owner + ' · ' + pct + '% used</div></div>';
+      }).join('');
+  }
+
+  function renderPolicies() {
+    return head('Policies', 'Assign a policy to a branch, department, team, or employee. Click a policy to edit general rules and category caps.') +
+      S.data.policies.map(function (p) {
+        return '<button class="card" style="display:block;width:100%;text-align:left;padding:14px 16px;margin-bottom:10px" data-pol="' + p.id + '"><strong>' + p.name + '</strong><div class="tiny muted">' + p.users + '</div><div class="tiny" style="margin-top:8px">Lodging ' + money(p.lodging) + '/night · Meals ' + money(p.meals) + ' · Mileage $' + p.mileage + '/mi · Receipt over ' + money(p.receipt) + '</div></button>';
+      }).join('');
+  }
+
+  function renderPolicy() {
+    var p = S.data.policies.find(function (x) { return x.id === S.selectedPolicy; }) || S.data.policies[0];
+    return '<button class="btn ghost" data-go="policies">Policies</button>' +
+      head(p.name + ' policy', 'Associated with ' + p.users + '. Violations warn on submit; Jordan can still approve with a reason.') +
+      '<div class="card" style="padding:16px;margin-bottom:12px"><h2 style="font-size:15px;margin:0 0 8px">General rules</h2>' +
+        '<div class="rule"><div><div>Maximum expense amount</div><div class="tiny muted">Uncategorized expenses are ' + p.uncategorized + 'ed</div></div><span class="money">$500</span></div>' +
+        '<div class="rule"><div><div>Receipt required</div><div class="tiny muted">Description required over the same amount</div></div><span class="money">' + money(p.receipt) + '</span></div>' +
+        '<div class="rule"><div><div>Duplicate detection</div><div class="tiny muted">Same date, amount, and currency</div></div><span class="chip warn">' + p.duplicates + '</span></div>' +
+        '<div class="rule"><div><div>On violation</div><div class="tiny muted">Warn allows submit; Block stops the report</div></div><span class="chip warn">' + p.action + '</span></div>' +
+      '</div>' +
+      '<div class="card" style="padding:16px;margin-bottom:12px"><h2 style="font-size:15px;margin:0 0 8px">Category limits</h2>' +
+        '<div class="spread" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>Lodging</span><span>' + money(p.lodging) + ' / night · itemized receipt</span></div>' +
+        '<div class="spread" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>Meals</span><span>' + money(p.meals) + ' · attendees over cap</span></div>' +
+        '<div class="spread" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>Airfare</span><span>Economy only · receipt always</span></div>' +
+        '<div class="spread" style="padding:8px 0"><span>Mileage</span><span>$' + p.mileage + ' / mi · IRS</span></div></div>' +
+      '<div class="card" style="padding:16px"><h2 style="font-size:15px;margin:0 0 8px">Applies to</h2><p class="tiny">Expenses, trips, and advances for ' + p.users + '. Maya is on Sales, so Berlin lodging $312 flags vs $320 (Sales) but meals $86.40 flags vs $100 without a client note.</p></div>';
+  }
+
+  function renderReimbursements() {
+    var rows = S.data.reports.filter(function (r) { return r.status === 'approved' || r.status === 'payroll' || r.status === 'reimbursed'; });
+    return head('Reimbursements', 'Approved reports that still need money. ACH, bank export, or Zoho Payroll.') +
+      '<div class="card"><table class="data"><thead><tr><th>Report</th><th>User</th><th>Status</th><th class="num">Amount</th><th></th></tr></thead><tbody>' +
+      (rows.length ? rows.map(function (r) {
+        var act = (r.status === 'approved' || r.status === 'payroll') && S.role === 'priya' ? '<button class="btn red" data-act="reimburse" data-id="' + r.id + '">Reimburse</button>' : '';
+        return '<tr><td>' + r.name + '</td><td>' + PEOPLE[r.user].name + '</td><td>' + st(r.status) + '</td><td class="num">' + money(r.total) + '</td><td>' + act + '</td></tr>';
+      }).join('') : '<tr><td colspan="5" class="muted">Nothing to reimburse.</td></tr>') +
+      '</tbody></table></div>';
+  }
+
+  function renderPerDiem() {
+    return head('Per diem', 'Location rates, optional split by expense type, and a percentage by travel hours. Auto-create on an approved trip.') +
+      S.data.perDiems.map(function (d) {
+        return '<div class="card" style="padding:14px 16px;margin-bottom:10px"><div class="spread"><strong>' + d.dest + '</strong><span class="money">' + money(d.amount) + '/day</span></div><div class="tiny muted" style="margin-top:6px">' + d.hours + '</div></div>';
+      }).join('') +
+      '<p class="tiny muted">Lisbon trip can auto-create 4 days × $112 when Priya approves the trip.</p>';
+  }
+
+  function renderPayments() {
+    return head('Payments', 'How Northwind sends money after a report is approved.') +
+      '<div class="card" style="padding:16px">' +
+        '<div class="rule"><div><div>ACH reimbursements</div><div class="tiny muted">US direct deposit from Zoho Expense to the employee bank</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div>Bank export</div><div class="tiny muted">NACHA / CSV for the bank to process</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div>Reimburse via Payroll</div><div class="tiny muted">Zoho Payroll early access · status “Awaiting reimbursement via Payroll”</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div>Record manually</div><div class="tiny muted">Check or already-paid outside the product</div></div><i class="sw"></i></div>' +
+      '</div>';
+  }
+
+  function renderIntegrations() {
+    return head('Integrations', 'Books for GL. Payroll for reimbursements in the pay run.') +
+      '<div class="card" style="padding:16px;margin-bottom:10px"><div class="spread"><strong>Zoho Books</strong><span class="chip ok">Connected</span></div><p class="tiny muted" style="margin-top:8px">Categories map to expense accounts. Reimbursed reports post as bills; card spend as expenses.</p></div>' +
+      '<div class="card" style="padding:16px;margin-bottom:10px"><div class="spread"><strong>Zoho Payroll</strong><span class="chip ok">Connected · early access</span></div><p class="tiny muted" style="margin-top:8px">Approved reports marked Reimburse via Payroll appear on the employee’s next pay run as a reimbursement line. Refunds (advance overage) deduct. After the pay run is recorded, the report becomes Reimbursed here.</p></div>' +
+      '<div class="card" style="padding:16px"><div class="spread"><strong>Corporate cards</strong><span class="chip">Visa feed</span></div><p class="tiny muted" style="margin-top:8px">Alex ••8821 · Maya ••4410</p></div>';
+  }
+
+  function renderUsers() {
+    return head('Users & roles', 'Submitter, Approver, Admin. Custom roles exist in the live product.') +
+      '<div class="card"><table class="data"><thead><tr><th>User</th><th>Role</th><th>Policy</th></tr></thead><tbody>' +
+      '<tr><td>Maya Chen</td><td>Submitter</td><td>Sales</td></tr>' +
+      '<tr><td>Alex Rivera</td><td>Submitter</td><td>Default</td></tr>' +
+      '<tr><td>Jordan Hale</td><td>Approver</td><td>Default</td></tr>' +
+      '<tr><td>Priya Shah</td><td>Admin</td><td>Default</td></tr>' +
+      '</tbody></table></div>';
+  }
+
+  function openCreate(kind) {
+    if (kind === 'advance') {
+      S.data.advances.unshift({ id: 'a' + Date.now(), user: S.role, amount: 200, status: 'pending', trip: 't2', applied: 0 });
+      toast('Advance submitted for approval'); go('advances'); return;
+    }
+    if (kind === 'report') {
+      S.data.reports.unshift({ id: 'p' + Date.now(), name: 'Untitled report', user: S.role, status: 'draft', total: 0, trip: null, approver: 'jordan' });
+      toast('Report created'); go('reports'); return;
+    }
+    if (kind === 'trip') {
+      $('modal').innerHTML = '<div class="overlay"><form class="dialog" id="tf"><h2>New trip request</h2>' +
+        '<div class="field"><label>Name</label><input name="name" required placeholder="City + reason"></div>' +
+        '<div class="field"><label>City</label><input name="city" required></div>' +
+        '<div class="field"><label>Budget (USD)</label><input name="budget" type="number" value="1200"></div>' +
+        '<div class="spread"><button class="btn ghost" type="button" id="cx">Cancel</button><button class="btn red" type="submit">Submit for approval</button></div></form></div>';
+      $('cx').onclick = function () { $('modal').innerHTML = ''; };
+      $('tf').onsubmit = function (e) {
+        e.preventDefault();
+        var f = e.target;
+        S.data.trips.unshift({ id: 't' + Date.now(), name: f.name.value, user: S.role, start: '2026-12-20', end: '2026-12-22', city: f.city.value, status: 'pending', budget: +f.budget.value, spent: 0 });
+        $('modal').innerHTML = ''; toast('Trip submitted to Jordan'); go('trips');
+      };
+      return;
+    }
+    $('modal').innerHTML = '<div class="overlay"><form class="dialog" id="ef"><h2>Record expense</h2>' +
+      '<div class="receipt" id="scan">Click to Autoscan a sample receipt</div>' +
+      '<div class="field"><label>Merchant</label><input name="merchant" required></div>' +
+      '<div class="field"><label>Amount</label><input name="amount" type="number" step="0.01" required></div>' +
+      '<div class="field"><label>Type</label><select name="kind"><option value="receipt">Receipt / merchant</option><option value="mileage">Mileage</option><option value="perdiem">Per diem</option></select></div>' +
+      '<div class="field"><label>Category</label><select name="cat"><option value="">Select</option>' + CATS.map(function (c) { return '<option>' + c + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><label>Trip</label><select name="trip"><option value="">None</option>' + mine(S.data.trips).map(function (t) { return '<option value="' + t.id + '">' + t.name + '</option>'; }).join('') + '</select></div>' +
+      '<div class="spread"><button class="btn ghost" type="button" id="cx">Cancel</button><button class="btn red" type="submit">Save</button></div></form></div>';
+    $('cx').onclick = function () { $('modal').innerHTML = ''; };
+    $('scan').onclick = function () {
+      var f = $('ef'); f.merchant.value = 'Pret A Manger'; f.amount.value = '14.80'; f.cat.value = 'Meals';
+      this.className = 'receipt ok'; this.textContent = 'Autoscan · Pret A Manger · $14.80';
+    };
+    $('ef').onsubmit = function (e) {
+      e.preventDefault();
+      var f = e.target;
+      var kind = f.kind.value;
+      var merch = kind === 'perdiem' ? 'Per diem' : (kind === 'mileage' ? 'Mileage' : f.merchant.value);
+      var cat = kind === 'perdiem' ? 'Per Diem' : (kind === 'mileage' ? 'Mileage' : f.cat.value);
+      S.data.expenses.unshift({ id: 'x' + Date.now(), user: S.role, date: '2026-11-25', merchant: merch, cat: cat, amount: +f.amount.value, report: null, trip: f.trip.value || null, receipt: kind === 'receipt', policy: cat === 'Meals' && +f.amount.value > 75 ? 'Meal over $75 without client note' : null });
+      $('modal').innerHTML = ''; toast('Expense recorded'); go('expenses');
+    };
+  }
+
+  function act(name, id) {
+    if (name === 'approve' || name === 'reject' || name === 'submit' || name === 'reimburse') {
+      var r = S.data.reports.find(function (x) { return x.id === id; });
+      if (!r) return;
+      if (name === 'submit') { r.status = 'submitted'; toast('Submitted to ' + PEOPLE[r.approver].name); }
+      if (name === 'approve') { r.status = 'approved'; toast('Approved'); }
+      if (name === 'reject') { r.status = 'draft'; toast('Returned to submitter'); }
+      if (name === 'reimburse') { openZohoPay(r); return; }
+    }
+    if (name === 'tripok') {
+      var t = S.data.trips.find(function (x) { return x.id === id; });
+      if (t) { t.status = 'approved'; toast('Trip approved'); }
+    }
+    if (name === 'advok') {
+      var a = S.data.advances.find(function (x) { return x.id === id; });
+      if (a) { a.status = 'approved'; toast('Advance approved'); }
+    }
+    if (name === 'addrep') {
+      var e = S.data.expenses.find(function (x) { return x.id === id; });
+      var draft = S.data.reports.find(function (p) { return p.user === S.role && p.status === 'draft'; });
+      if (!draft) {
+        draft = { id: 'p' + Date.now(), name: 'Untitled report', user: S.role, status: 'draft', total: 0, trip: e.trip, approver: 'jordan' };
+        S.data.reports.unshift(draft);
+      }
+      e.report = draft.id;
+      draft.total += e.amount;
+      toast('Added to ' + draft.name);
+    }
+    render();
+  }
+
+  function openZohoPay(r) {
+    $('modal').innerHTML = '<div class="overlay"><div class="dialog"><h2>Reimburse ' + r.name + '</h2><p class="tiny muted">' + money(r.total) + ' to ' + PEOPLE[r.user].name + '.</p>' +
+      '<button class="payopt" data-payhow="ach"><strong>ACH direct deposit</strong><div class="tiny muted">US/Canada · from Zoho Expense to the employee bank</div></button>' +
+      '<button class="payopt" data-payhow="export"><strong>Bank export</strong><div class="tiny muted">Download NACHA / CSV for the bank</div></button>' +
+      '<button class="payopt" data-payhow="payroll"><strong>Reimburse via Payroll</strong><div class="tiny muted">Sends the aggregate to Zoho Payroll’s next pay run. Status becomes Awaiting reimbursement via Payroll until payday.</div></button>' +
+      '<button class="payopt" data-payhow="manual"><strong>Record manually</strong><div class="tiny muted">Already paid by check or outside the product</div></button>' +
+      '<button class="btn ghost" type="button" id="cx">Cancel</button></div></div>';
+    $('cx').onclick = function () { $('modal').innerHTML = ''; };
+    document.querySelectorAll('[data-payhow]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var how = b.getAttribute('data-payhow');
+        r.status = how === 'payroll' ? 'payroll' : 'reimbursed';
+        r.payHow = how;
+        $('modal').innerHTML = '';
+        toast(how === 'payroll' ? 'Queued for Zoho Payroll' : (how === 'export' ? 'Bank file downloaded' : (how === 'ach' ? 'ACH reimbursement sent' : 'Marked reimbursed')));
+        render();
+      });
+    });
+  }
+
+  function render() {
+    renderChrome();
+    var map = {
+      home: renderHome, expenses: renderExpenses, expense: renderExpense, reports: renderReports, report: renderReport,
+      trips: renderTrips, trip: renderTrip, advances: renderAdvances, cards: renderCards, approvals: renderApprovals,
+      analytics: renderAnalytics, budgets: renderBudgets, policies: renderPolicies, policy: renderPolicy, users: renderUsers,
+      reimbursements: renderReimbursements, perdiem: renderPerDiem, payments: renderPayments, integrations: renderIntegrations,
+      purchases: function () { return head('Purchase Requests', 'Requests for goods or services before a trip or expense.') + '<div class="card" style="padding:16px">No open purchase requests.</div>'; },
+      org: function () { return head('Organization', 'Northwind Labs · USD · fiscal year January.') + '<div class="card" style="padding:16px">Base currency USD. Distance in miles. Receipt required over $25. Duplicate detection on.</div>'; },
+      categories: function () { return head('Categories', 'Mapped to GL codes. Expense types can be marked as per diem components.') + '<div class="card"><table class="data"><thead><tr><th>Category</th><th>Type</th><th></th></tr></thead><tbody>' + CATS.map(function (c) { return '<tr><td>' + c + '</td><td class="muted">' + (c === 'Per Diem' ? 'Per diem component' : 'Expense') + '</td><td class="muted">Enabled</td></tr>'; }).join('') + '</tbody></table></div>'; },
+      mileage: function () { return head('Mileage', 'Policy-level rates. Vehicles and GPS, map, or odometer.') + '<div class="card" style="padding:16px"><div class="spread"><span>Personal car · Default / Sales</span><span>$0.67 / mi</span></div><div class="spread" style="margin-top:8px"><span>Company vehicle</span><span>$0.00 (not reimbursed)</span></div><p class="tiny muted" style="margin-top:12px">Maya’s SF–San Jose 82 mi used map distance × Default rate.</p></div>'; },
+      'approvals-setup': function () { return head('Approvals', 'Hierarchical for reports and trips. Custom flow when amount > $500 or a policy violation.') +
+        '<div class="card" style="padding:16px;margin-bottom:10px"><strong>Hierarchical</strong><p class="tiny muted">Reports and trips → user’s Submits To (Jordan Hale).</p></div>' +
+        '<div class="card" style="padding:16px;margin-bottom:10px"><strong>Custom · over $500 or violation</strong><p class="tiny muted">Level 1 Submits To · Level 2 Priya Shah (finance). Auto-approve is off.</p></div>' +
+        '<div class="card" style="padding:16px"><strong>Simple</strong><p class="tiny muted">Advances and petty-cash top-ups go to admins.</p></div>'; }
+    };
+    $('main').innerHTML = (map[S.view] || renderHome)();
+    var root = $('main');
+    root.querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { go(b.getAttribute('data-go')); }); });
+    root.querySelectorAll('[data-exp]').forEach(function (b) { b.addEventListener('click', function () { go('expense', { selected: b.getAttribute('data-exp') }); }); });
+    root.querySelectorAll('[data-rep]').forEach(function (b) { b.addEventListener('click', function () { go('report', { selected: b.getAttribute('data-rep') }); }); });
+    root.querySelectorAll('[data-trip]').forEach(function (b) { b.addEventListener('click', function () { go('trip', { selected: b.getAttribute('data-trip') }); }); });
+    root.querySelectorAll('[data-act]').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); act(b.getAttribute('data-act'), b.getAttribute('data-id')); }); });
+    root.querySelectorAll('[data-create]').forEach(function (b) { b.addEventListener('click', function () { openCreate(b.getAttribute('data-create')); }); });
+    root.querySelectorAll('[data-pol]').forEach(function (b) { b.addEventListener('click', function () { go('policy', { selectedPolicy: b.getAttribute('data-pol') }); }); });
+  }
+
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $('modal').innerHTML = ''; });
+  render();
+})();
+</script>
+</body>
+</html>

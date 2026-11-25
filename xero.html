@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<!-- Project tags (PROJECT_TAGS.md): @modhr/documentation @modhr/expenses @/ux-ui-quality -->
+<!--
+  Unofficial Xero full-suite review mockup (expenses, bills, bank, reports).
+  Open in a browser. Offline, in-memory only. Hub: index.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xero — Northwind Labs (mockup)</title>
+<style>
+:root {
+  --xero: #13b5ea;
+  --xero-deep: #1a3c57;
+  --xero-ink: #1b2a38;
+  --ok: #00a651;
+  --bad: #e03636;
+  --warn: #d97706;
+  --bg: #f5f7f8;
+  --card: #fff;
+  --line: #d9e1e6;
+  --muted: #5b6b76;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font-family: var(--sans); background: #f4f6f8; color: var(--xero-ink); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--xero); outline-offset: 2px; }
+
+.review {
+  display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
+  padding: 8px 14px; background: #0b1c28; color: #d7e6ef; font-size: 12px;
+}
+.review strong { color: var(--xero); }
+.review a { color: var(--xero); }
+.seg { display: inline-flex; border: 1px solid #2a4558; border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: #9fb4c2; padding: 5px 10px; }
+.seg button[aria-pressed="true"] { background: #163246; color: #fff; }
+.grow { margin-inline-start: auto; color: #9fb4c2; }
+
+.shell { background: var(--bg); min-height: calc(100vh - 41px); }
+.shell.mobile { max-width: 390px; margin: 12px auto; min-height: calc(100vh - 65px); border-radius: 12px; overflow: hidden; border: 1px solid #1a3c57; }
+
+.mast {
+  background: #fff; border-bottom: 1px solid var(--line); padding: 8px 16px 0;
+}
+.mast-top { display: grid; grid-template-columns: 1fr minmax(220px, 420px) 1fr; align-items: center; gap: 12px; }
+.org-wrap { display: flex; align-items: center; gap: 8px; }
+.smart { display: flex; align-items: center; gap: 8px; background: #f4f6f8; border-radius: 20px; padding: 6px 14px; font-size: 13px; color: var(--muted); width: 100%; }
+.tools { justify-self: end; }
+.topbar {
+  background: #fff; color: var(--xero-ink);
+  display: flex; align-items: center; gap: 2px; padding: 4px 4px 0; height: 40px;
+}
+.mark {
+  width: 28px; height: 28px; border-radius: 6px; background: var(--xero); color: #083247;
+  display: grid; place-items: center; font-weight: 800; margin-right: 8px; border: 0;
+}
+.topbar .nav {
+  background: transparent; border: 0; color: var(--xero-ink); padding: 8px 14px 10px; border-radius: 0;
+  font-size: 13px; border-bottom: 3px solid transparent;
+}
+.topbar .nav[aria-current="page"] { background: transparent; color: var(--xero-deep); font-weight: 650; border-bottom-color: var(--xero); }
+.org { font-size: 13px; font-weight: 650; margin-right: 8px; }
+.tools { margin-inline-start: 0; display: flex; align-items: center; gap: 4px; color: var(--muted); }
+.tools button { border: 0; background: transparent; padding: 6px 8px; border-radius: 6px; font-size: 12px; color: var(--muted); }
+.tools button:hover { background: var(--bg); }
+.tools .create { background: var(--xero); color: #083247; font-weight: 700; border-radius: 4px; }
+.subnav {
+  background: #fff; border-bottom: 1px solid var(--line);
+  display: flex; gap: 4px; padding: 0 16px; overflow-x: auto;
+}
+.subnav button {
+  border: 0; background: transparent; padding: 12px 12px 10px; color: var(--muted);
+  border-bottom: 3px solid transparent; white-space: nowrap;
+}
+.subnav button[aria-current="true"] { color: var(--xero-deep); border-bottom-color: var(--xero); font-weight: 650; }
+
+.main { padding: 20px 24px 48px; max-width: 1180px; }
+h1 { font-size: 22px; margin: 0 0 4px; font-weight: 500; }
+.lede { color: var(--muted); margin: 0 0 16px; font-size: 13px; }
+.spread { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.grid { display: grid; gap: 16px; }
+.kpis { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 1px 2px rgb(27 42 56 / 0.05); }
+.widget { padding: 16px 18px; }
+.home-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (min-width: 1100px) { .home-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.widget h2 { font-size: 14px; margin: 0 0 10px; font-weight: 650; }
+.stat { font-size: 26px; font-weight: 500; letter-spacing: -0.03em; }
+.muted { color: var(--muted); }
+.tiny { font-size: 12px; }
+.money { font-variant-numeric: tabular-nums; }
+.green { color: var(--ok); }
+.red { color: var(--bad); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; border-radius: 3px; border: 1px solid transparent;
+  padding: 7px 12px; font-size: 13px; font-weight: 650; background: transparent;
+}
+.btn.primary { background: var(--xero); color: #083247; }
+.btn.blue { background: var(--xero-deep); color: #fff; }
+.btn.ghost { border-color: var(--line); background: #fff; }
+.btn.ok { background: var(--ok); color: #fff; }
+.btn.danger { background: var(--bad); color: #fff; }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.data th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--line); background: #fafcfd; }
+table.data td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+table.data tr.click { cursor: pointer; }
+table.data tr.click:hover { background: #f3fbfe; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #eef3f6; }
+.badge.draft { background: #eef3f6; }
+.badge.review { background: #fff4d6; color: #8a5a12; }
+.badge.pay { background: #e6f7ee; color: #0a7a40; }
+.badge.paid { background: #e8f6fc; color: #0b6e94; }
+.badge.over { background: #fdecea; color: var(--bad); }
+
+.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--line); }
+.tabs button { border: 0; background: transparent; padding: 10px 14px; color: var(--muted); }
+.tabs button[aria-selected="true"] { color: var(--xero-deep); box-shadow: inset 0 -2px 0 var(--xero); font-weight: 650; }
+
+.rec { display: grid; grid-template-columns: 1fr 1fr; min-height: 420px; }
+.rec-col { padding: 12px; }
+.rec-col + .rec-col { border-left: 1px solid var(--line); }
+.stmt { border: 1px solid var(--line); border-radius: 4px; padding: 12px; margin-bottom: 12px; background: #fbfdfe; }
+.match { border: 1px solid #b7e4c7; background: #f1fbf5; border-radius: 4px; padding: 12px; }
+.predict { font-style: italic; color: var(--muted); }
+
+.field { display: grid; gap: 4px; margin-bottom: 10px; }
+.field label { font-size: 12px; font-weight: 650; }
+.field input, .field select, .field textarea { border: 1px solid var(--line); border-radius: 3px; padding: 7px 8px; }
+.overlay { position: fixed; inset: 0; background: rgb(26 60 87 / 0.4); display: grid; place-items: center; z-index: 40; padding: 16px; }
+.dialog { background: #fff; width: min(100%, 640px); max-height: calc(100vh - 32px); overflow: auto; padding: 20px; border-radius: 4px; }
+.lines { width: 100%; border-collapse: collapse; font-size: 13px; }
+.lines th, .lines td { border-bottom: 1px solid var(--line); padding: 6px; }
+.toast { background: #e6f7ee; border: 1px solid #b7e4c7; padding: 8px 12px; border-radius: 3px; }
+.payopt { display: block; width: 100%; text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 12px 14px; margin-bottom: 8px; }
+.payopt:hover { border-color: var(--xero); }
+.sw { display: inline-flex; width: 36px; height: 20px; border-radius: 99px; background: var(--ok); position: relative; vertical-align: middle; }
+.sw::after { content: ""; position: absolute; width: 16px; height: 16px; background: #fff; border-radius: 50%; top: 2px; right: 2px; }
+
+.bars { display: flex; align-items: flex-end; gap: 6px; height: 90px; }
+.bars > div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.bars i { display: block; width: 100%; background: var(--xero); border-radius: 2px 2px 0 0; }
+.bars b { display: block; width: 100%; background: var(--ok); border-radius: 2px 2px 0 0; margin-top: 2px; }
+.bars span { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+@media (max-width: 800px) {
+  .rec { grid-template-columns: 1fr; }
+  .kpis { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="review">
+  <strong>Review mockup</strong>
+  <span>Xero suite</span>
+  <a href="index.html">All platforms</a>
+  <span>Role</span>
+  <div class="seg" id="roleSeg"></div>
+  <span>Viewport</span>
+  <div class="seg" id="vpSeg"></div>
+  <button class="btn ghost" id="resetBtn" type="button">Reset data</button>
+  <span class="grow">Unofficial reconstruction · Northwind Labs · Nov 2026</span>
+</div>
+<div class="shell" id="shell">
+  <header class="mast">
+    <div class="mast-top">
+      <div class="org-wrap">
+        <button class="mark" type="button" data-go="dashboard">X</button>
+        <span class="org">Northwind Labs</span>
+      </div>
+      <div class="smart">Search invoices, bills, contacts…</div>
+      <div class="tools">
+        <button type="button" class="create" id="xCreate">New</button>
+        <button type="button" title="JAX">JAX</button>
+        <button type="button">Help</button>
+        <button type="button">Alerts</button>
+        <button type="button" data-go="settings">PS</button>
+      </div>
+    </div>
+    <div class="topbar">
+      <button class="nav" data-go="dashboard" id="n-dashboard">Home</button>
+      <button class="nav" data-go="sales" id="n-sales">Sales</button>
+      <button class="nav" data-go="purchases" id="n-purchases">Purchases</button>
+      <button class="nav" data-go="reporting" id="n-reporting">Reporting</button>
+      <button class="nav" data-go="accounting" id="n-accounting">Accounting</button>
+      <button class="nav" data-go="tax" id="n-tax">Tax</button>
+      <button class="nav" data-go="payroll" id="n-payroll">Payroll</button>
+      <button class="nav" data-go="contacts" id="n-contacts">Contacts</button>
+      <button class="nav" data-go="projects" id="n-projects">Projects</button>
+    </div>
+  </header>
+  <div class="subnav" id="subnav"></div>
+  <main class="main" id="main"></main>
+</div>
+<div id="modal"></div>
+<script>
+(function () {
+  var PEOPLE = {
+    maya: { name: 'Maya Chen', role: 'Employee' },
+    jordan: { name: 'Jordan Hale', role: 'Approver' },
+    priya: { name: 'Priya Shah', role: 'Adviser' },
+    alex: { name: 'Alex Rivera', role: 'Employee' }
+  };
+  var ACCOUNTS = [
+    ['429', 'Travel — airfare & taxi'],
+    ['430', 'Travel — lodging'],
+    ['431', 'Meals & entertainment'],
+    ['461', 'Computer software'],
+    ['460', 'Training & conferences'],
+    ['610', 'Motor vehicle — mileage']
+  ];
+  function seed() {
+    return {
+      claims: [
+        { id: 'c1', user: 'maya', date: '2026-11-14', status: 'review', total: 501.54, receipt: true, title: 'Berlin customer week', lines: [
+          { date: '2026-11-10', account: '429', desc: 'Uber SFO', amount: 48.20, tax: 'No VAT', receipt: true },
+          { date: '2026-11-11', account: '430', desc: 'Kimpton De Witt 2 nights', amount: 312.00, tax: 'No VAT', receipt: true },
+          { date: '2026-11-12', account: '431', desc: 'Cafe De Reiger — Anika Vogt', amount: 86.40, tax: 'No VAT', receipt: true },
+          { date: '2026-11-04', account: '610', desc: '82 miles SF–San Jose @ 0.67', amount: 54.94, tax: 'No VAT', receipt: false }
+        ]},
+        { id: 'c2', user: 'maya', date: '2026-11-19', status: 'pay', total: 890.00, receipt: true, title: 'Web Summit ticket', lines: [
+          { date: '2026-11-18', account: '460', desc: 'Web Summit Lisbon', amount: 890.00, tax: 'No VAT', receipt: true }
+        ]},
+        { id: 'c3', user: 'alex', date: '2026-11-20', status: 'draft', total: 1299.99, receipt: true, title: 'November tools', lines: [
+          { date: '2026-11-03', account: '461', desc: 'Amazon Web Services', amount: 1240.00, tax: 'No VAT', receipt: true },
+          { date: '2026-11-01', account: '461', desc: 'Adobe Creative Cloud', amount: 59.99, tax: 'No VAT', receipt: false }
+        ]},
+        { id: 'c4', user: 'maya', date: '2026-10-28', status: 'paid', total: 214.10, receipt: true, title: 'October field travel', lines: [] }
+      ],
+      bills: [
+        { id: 'b1', contact: 'AWS', date: '2026-11-03', due: '2026-12-03', status: 'awaiting', total: 1240.00, ref: 'INV-88421' },
+        { id: 'b2', contact: 'Kimpton Hotels', date: '2026-11-11', due: '2026-11-18', status: 'paid', total: 312.00, ref: 'HTL-Berlin' },
+        { id: 'b3', contact: 'Web Summit', date: '2026-11-18', due: '2026-11-18', status: 'awaiting', total: 890.00, ref: 'WS-2026' },
+        { id: 'b4', contact: 'Office Supplies Co', date: '2026-11-22', due: '2026-12-22', status: 'draft', total: 186.40, ref: '' }
+      ],
+      bank: [
+        { id: 's1', date: '2026-11-24', payee: 'PRET A MANGER', spent: 14.80, received: 0, match: null, predict: { contact: 'Maya Chen', account: '431', desc: 'Meals' } },
+        { id: 's2', date: '2026-11-20', payee: 'TAP AIR PORTUGAL', spent: 642.00, received: 0, match: { type: 'claim', label: 'Possible: Maya travel claim (not yet submitted)' } },
+        { id: 's3', date: '2026-11-18', payee: 'WEB SUMMIT', spent: 890.00, received: 0, match: { type: 'bill', label: 'Bill WS-2026 · Web Summit · $890.00' } },
+        { id: 's4', date: '2026-11-12', payee: 'HELIX GMBH', spent: 0, received: 4800.00, match: { type: 'invoice', label: 'Invoice INV-1044 · Helix GmbH · $4,800.00' } }
+      ],
+      contacts: [
+        { name: 'Helix GmbH', type: 'Customer', email: 'ap@helix.example' },
+        { name: 'Amazon Web Services', type: 'Supplier', email: 'billing@aws.example' },
+        { name: 'Kimpton Hotels', type: 'Supplier', email: 'ar@kimpton.example' },
+        { name: 'Web Summit', type: 'Supplier', email: 'pay@websummit.example' },
+        { name: 'Maya Chen', type: 'Employee', email: 'maya@northwind.example' }
+      ],
+      payRuns: [
+        { id: 'pr1', period: '1–15 Nov 2026', status: 'paid', reimbursements: 214.10 },
+        { id: 'pr2', period: '16–30 Nov 2026', status: 'draft', reimbursements: 0 }
+      ]
+    };
+  }
+
+  var S = { role: 'maya', view: 'dashboard', sub: '', vp: 'wide', selectedClaim: 'c1', selectedBill: 'b1', tab: 'review', toast: '', data: seed() };
+  var NAV = {
+    dashboard: [],
+    sales: [['invoices','Invoices'],['quotes','Quotes']],
+    purchases: [['purchases','Overview'],['bills','Bills to pay'],['expenses','Expense claims'],['pos','Purchase orders'],['expsettings','Expense settings']],
+    payroll: [['payruns','Pay runs'],['payitems','Pay items'],['payemployees','Employees']],
+    reporting: [['pl','Profit and loss'],['expense','Expense claims summary']],
+    accounting: [['bank','Bank accounts'],['reconcile','Reconcile'],['accounts','Chart of accounts'],['rules','Bank rules']],
+    tax: [['tax','Tax rates']],
+    contacts: [],
+    projects: [],
+    settings: []
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function money(n) { return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmt(d) { if (!d) return '—'; var p = d.split('-'); return p[2] + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1] + ' ' + p[0].slice(2); }
+  function badge(st) {
+    var m = { draft: ['Draft','draft'], review: ['Awaiting authorisation','review'], pay: ['Awaiting payment','pay'], paid: ['Paid','paid'], awaiting: ['Awaiting payment','pay'], overdue: ['Overdue','over'] };
+    var x = m[st] || [st, 'draft'];
+    return '<span class="badge ' + x[1] + '">' + x[0] + '</span>';
+  }
+  function claimsForRole() {
+    var d = S.data.claims;
+    if (S.role === 'maya') return d.filter(function (c) { return c.user === 'maya'; });
+    if (S.role === 'jordan') return d.filter(function (c) { return c.status !== 'draft' || c.user === 'jordan'; });
+    return d;
+  }
+  function go(view, extra) {
+    S.view = view;
+    if (extra) Object.keys(extra).forEach(function (k) { S[k] = extra[k]; });
+    if (view === 'expenses' || view === 'purchases' || view === 'bills' || view === 'pos' || view === 'expsettings') S.viewTop = 'purchases';
+    else if (view === 'invoices' || view === 'quotes') S.viewTop = 'sales';
+    else if (view === 'bank' || view === 'reconcile' || view === 'accounts' || view === 'rules') S.viewTop = 'accounting';
+    else if (view === 'pl' || view === 'expense') S.viewTop = 'reporting';
+    else if (view === 'tax') S.viewTop = 'tax';
+    else if (view === 'payroll' || view === 'payruns' || view === 'payitems' || view === 'payemployees') S.viewTop = 'payroll';
+    else S.viewTop = view;
+    render();
+  }
+  function toast(m) { S.toast = m; render(); setTimeout(function () { if (S.toast === m) { S.toast = ''; render(); } }, 2200); }
+
+  function renderChrome() {
+    $('shell').className = 'shell' + (S.vp === 'mobile' ? ' mobile' : '');
+    var top = S.viewTop || (NAV[S.view] ? S.view : 'dashboard');
+    ['dashboard','sales','purchases','reporting','accounting','tax','payroll','contacts','projects'].forEach(function (k) {
+      var n = $('n-' + k);
+      if (!n) return;
+      var on = top === k || S.view === k;
+      if (on) n.setAttribute('aria-current', 'page'); else n.removeAttribute('aria-current');
+    });
+    var items = NAV[top] || [];
+    var sub = $('subnav');
+    sub.innerHTML = items.map(function (it) {
+      return '<button type="button" data-go="' + it[0] + '"' + (S.view === it[0] ? ' aria-current="true"' : '') + '>' + it[1] + '</button>';
+    }).join('');
+    if (! $('roleSeg').dataset.ready) {
+      [['maya','Maya · employee'],['jordan','Jordan · approver'],['priya','Priya · adviser']].forEach(function (r) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = r[1];
+        b.addEventListener('click', function () { S.role = r[0]; render(); });
+        b.dataset.role = r[0]; $('roleSeg').append(b);
+      });
+      [['wide','Desktop'],['mobile','Mobile']].forEach(function (v) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = v[1];
+        b.addEventListener('click', function () { S.vp = v[0]; render(); });
+        b.dataset.vp = v[0]; $('vpSeg').append(b);
+      });
+      $('roleSeg').dataset.ready = '1';
+      $('resetBtn').addEventListener('click', function () { S.data = seed(); toast('Sample month restored'); });
+      var xc = $('xCreate');
+      if (xc) xc.addEventListener('click', function () { go('expenses'); openNewClaim(); });
+      document.querySelectorAll('.mast [data-go]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var v = b.getAttribute('data-go');
+          if (v === 'purchases') go('expenses');
+          else if (v === 'sales') go('invoices');
+          else if (v === 'accounting') go('bank');
+          else if (v === 'reporting') go('expense');
+          else if (v === 'payroll') go('payruns');
+          else go(v);
+        });
+      });
+    }
+    $('roleSeg').querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.role === S.role ? 'true' : 'false'); });
+    $('vpSeg').querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.vp === S.vp ? 'true' : 'false'); });
+  }
+
+  function renderDashboard() {
+    var review = S.data.claims.filter(function (c) { return c.status === 'review'; }).length;
+    var pay = S.data.claims.filter(function (c) { return c.status === 'pay'; }).reduce(function (s,c) { return s + c.total; }, 0);
+    var bills = S.data.bills.filter(function (b) { return b.status === 'awaiting'; }).reduce(function (s,b) { return s + b.total; }, 0);
+    var rec = S.data.bank.length;
+    return (S.toast ? '<div class="toast">' + S.toast + '</div>' : '') +
+      '<div class="home-grid">' +
+        '<div class="card widget"><h2>Bank accounts</h2><div class="tiny muted">Checking · ••1190</div><div class="stat">' + money(42840.12) + '</div>' +
+          '<div class="tiny" style="margin-top:6px">Statement ' + money(42183.32) + ' <span class="red">Balance mismatch</span></div>' +
+          '<button class="btn primary" style="margin-top:12px" data-go="reconcile">Reconcile ' + rec + ' items</button></div>' +
+        '<div class="card widget"><h2>Invoices owed to you</h2><div class="stat">' + money(4800) + '</div><div class="tiny muted">Awaiting payment · $0 overdue</div>' +
+          '<button class="btn ghost" style="margin-top:12px" data-go="invoices">View invoices</button></div>' +
+        '<div class="card widget"><h2>Bills to pay</h2><div class="stat red">' + money(bills) + '</div><div class="tiny muted">Due · $0 overdue</div>' +
+          '<button class="btn ghost" style="margin-top:12px" data-go="bills">New bill</button></div>' +
+        '<div class="card widget"><h2>Cash in and out</h2><div class="tiny muted">Last 6 months</div><div class="bars" style="margin-top:8px">' + [['Jun',3,2],['Jul',4,3],['Aug',3,2],['Sep',5,3],['Oct',4,4],['Nov',6,3]].map(function (m) {
+            return '<div><i style="height:' + (m[1]*10) + 'px"></i><b style="height:' + (m[2]*8) + 'px"></b><span>' + m[0] + '</span></div>';
+          }).join('') + '</div></div>' +
+        '<div class="card widget"><h2>Net profit or loss</h2><div class="stat green">' + money(18420) + '</div><div class="tiny muted">This month · income vs expenses</div></div>' +
+        '<div class="card widget"><h2>Expenses to review</h2><div class="stat">' + money(pay) + '</div><div class="tiny muted">' + review + ' awaiting authorisation</div>' +
+          '<button class="btn ghost" style="margin-top:12px" data-go="expenses">Review claims</button></div>' +
+        '<div class="card widget"><h2>Tasks</h2><button class="todo" style="display:block;width:100%;text-align:left;border:0;background:transparent;padding:8px 0" data-go="reconcile">' + rec + ' bank lines to reconcile</button>' +
+          '<button class="todo" style="display:block;width:100%;text-align:left;border:0;background:transparent;padding:8px 0" data-go="expenses">' + review + ' expense claim' + (review === 1 ? '' : 's') + ' to authorise</button></div>' +
+      '</div>';
+  }
+
+  function renderExpenses() {
+    var tab = S.tab;
+    var tabs = [['draft','Draft'],['review','Awaiting authorisation'],['pay','Awaiting payment'],['paid','Paid']];
+    var rows = claimsForRole().filter(function (c) { return c.status === tab; });
+    if (S.role === 'jordan' && tab === 'draft') rows = [];
+    return '<div class="spread"><div><h1>Expense claims</h1><p class="lede">Receipts stay on the claim. Approved claims wait here until they are paid, then they hit the bank rec.</p></div>' +
+      (S.role !== 'jordan' ? '<button class="btn primary" id="newClaim">New claim</button>' : '') + '</div>' +
+      (S.toast ? '<div class="toast" style="margin-bottom:12px">' + S.toast + '</div>' : '') +
+      '<div class="card"><div class="tabs">' + tabs.map(function (t) {
+        var n = claimsForRole().filter(function (c) { return c.status === t[0]; }).length;
+        return '<button type="button" data-tab="' + t[0] + '" aria-selected="' + (tab === t[0]) + '">' + t[1] + ' (' + n + ')</button>';
+      }).join('') + '</div><table class="data"><thead><tr><th>Claim</th><th>User</th><th>Date</th><th></th><th class="num">Total</th></tr></thead><tbody>' +
+      (rows.length ? rows.map(function (c) {
+        return '<tr class="click" data-claim="' + c.id + '"><td>' + c.title + '</td><td>' + PEOPLE[c.user].name + '</td><td>' + fmt(c.date) + '</td><td>' + badge(c.status) + '</td><td class="num money">' + money(c.total) + '</td></tr>';
+      }).join('') : '<tr><td colspan="5" class="muted">Nothing in this tab.</td></tr>') +
+      '</tbody></table></div>';
+  }
+
+  function renderClaim() {
+    var c = S.data.claims.find(function (x) { return x.id === S.selectedClaim; });
+    if (!c) return '<p>Claim not found.</p>';
+    var acc = {}; ACCOUNTS.forEach(function (a) { acc[a[0]] = a[1]; });
+    var actions = '';
+    if (S.role === 'maya' && c.user === 'maya' && c.status === 'draft') actions = '<button class="btn primary" data-act="submit" data-id="' + c.id + '">Submit</button>';
+    if (S.role === 'jordan' && c.status === 'review') actions = '<button class="btn ok" data-act="approve" data-id="' + c.id + '">Approve</button><button class="btn danger" data-act="reject" data-id="' + c.id + '">Decline</button>';
+    if (S.role === 'priya' && c.status === 'pay') actions = '<button class="btn blue" data-act="pay" data-id="' + c.id + '">Pay claim</button>';
+    return '<button class="btn ghost" data-go="expenses">All claims</button>' +
+      '<div class="spread" style="margin:12px 0"><div><h1>' + c.title + '</h1><p class="lede">' + PEOPLE[c.user].name + ' · ' + fmt(c.date) + ' · ' + badge(c.status) + '</p></div><div class="row">' + actions + '<div class="stat">' + money(c.total) + '</div></div></div>' +
+      '<div class="card"><table class="data"><thead><tr><th>Date</th><th>Account</th><th>Description</th><th>Tax</th><th class="num">Amount</th></tr></thead><tbody>' +
+      c.lines.map(function (l) {
+        return '<tr><td>' + fmt(l.date) + '</td><td>' + l.account + ' · ' + (acc[l.account] || '') + '</td><td>' + l.desc + (l.receipt ? ' · receipt' : '') + '</td><td>' + l.tax + '</td><td class="num">' + money(l.amount) + '</td></tr>';
+      }).join('') + '</tbody></table></div>' +
+      '<div class="card widget" style="margin-top:12px"><h2>Tracking</h2><p class="tiny muted">Department: Sales · Project: ' + (c.title.indexOf('Berlin') >= 0 ? 'Berlin customer week' : 'Unassigned') + '. Labels cannot be reported on — use tracking, a project, or a customer.</p></div>' +
+      (c.status === 'pay' ? '<p class="tiny muted" style="margin-top:12px">Approval created a bill owed to ' + PEOPLE[c.user].name + ' in accounts payable. Pay from bank, batch, or the next pay run.</p>' : '') +
+      (c.status === 'paid' && c.payHow === 'payroll' ? '<p class="tiny muted" style="margin-top:12px">Paid from Expense claims clearing on the Nov 16–30 pay run. The clearing account should net to zero.</p>' : '');
+  }
+
+  function renderPurchases() {
+    var awaiting = S.data.bills.filter(function (b) { return b.status === 'awaiting'; }).reduce(function (s,b) { return s + b.total; }, 0);
+    var overdue = 0;
+    return '<h1>Purchases overview</h1><p class="lede">Bills and expense claims in one cash view.</p>' +
+      '<div class="grid kpis">' +
+      '<div class="card widget"><h2>Draft</h2><div class="stat">' + S.data.bills.filter(function (b) { return b.status === 'draft'; }).length + '</div></div>' +
+      '<div class="card widget"><h2>Awaiting payment</h2><div class="stat">' + money(awaiting) + '</div></div>' +
+      '<div class="card widget"><h2>Overdue</h2><div class="stat red">' + money(overdue) + '</div></div>' +
+      '</div>';
+  }
+
+  function renderBills() {
+    return '<div class="spread"><h1>Bills</h1><button class="btn primary" id="newBill">New bill</button></div>' +
+      '<div class="card"><table class="data"><thead><tr><th>From</th><th>Ref</th><th>Date</th><th>Due</th><th></th><th class="num">Total</th></tr></thead><tbody>' +
+      S.data.bills.map(function (b) {
+        return '<tr class="click" data-bill="' + b.id + '"><td>' + b.contact + '</td><td>' + (b.ref || '—') + '</td><td>' + fmt(b.date) + '</td><td>' + fmt(b.due) + '</td><td>' + badge(b.status) + '</td><td class="num">' + money(b.total) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function renderBill() {
+    var b = S.data.bills.find(function (x) { return x.id === S.selectedBill; });
+    if (!b) return '<p>Missing bill.</p>';
+    return '<button class="btn ghost" data-go="bills">All bills</button><div class="spread" style="margin:12px 0"><div><h1>' + b.contact + '</h1><p class="lede">' + (b.ref || 'No reference') + ' · ' + badge(b.status) + '</p></div><div class="stat">' + money(b.total) + '</div></div>' +
+      '<div class="card widget"><p>Due ' + fmt(b.due) + '. Once paid, the bank statement line is matched on Reconcile.</p>' +
+      (S.role === 'priya' && b.status === 'awaiting' ? '<button class="btn blue" style="margin-top:12px" data-act="billpay" data-id="' + b.id + '">Mark as paid</button>' : '') + '</div>';
+  }
+
+  function renderBank() {
+    return '<h1>Bank accounts</h1><p class="lede">Statement balance vs balance in Xero. Reconcile clears the difference.</p>' +
+      '<div class="card widget spread"><div><div class="tiny muted">Checking · ••1190</div><div class="stat">' + money(42840.12) + '</div><div class="tiny muted">Statement ' + money(42183.32) + '</div></div>' +
+      '<button class="btn primary" data-go="reconcile">Reconcile ' + S.data.bank.length + ' items</button></div>';
+  }
+
+  function renderReconcile() {
+    var items = S.data.bank;
+    if (!items.length) return '<h1>Reconcile</h1><p>All statement lines are matched.</p>';
+    var s = items[0];
+    return '<h1>Reconcile · Checking</h1><p class="lede">' + items.length + ' statement lines left. OK accepts a match. Create posts a new spend money.</p>' +
+      '<div class="card rec"><div class="rec-col"><div class="tiny muted">Bank statement</div>' +
+      '<div class="stmt"><div class="spread"><strong>' + s.payee + '</strong><span>' + fmt(s.date) + '</span></div>' +
+      '<div class="spread" style="margin-top:8px"><span>' + (s.spent ? 'Spent' : 'Received') + '</span><span class="stat ' + (s.spent ? 'red' : 'green') + '">' + money(s.spent || s.received) + '</span></div></div>' +
+      items.slice(1).map(function (x) { return '<div class="tiny muted" style="padding:6px 0">' + fmt(x.date) + ' · ' + x.payee + ' · ' + money(x.spent || x.received) + '</div>'; }).join('') +
+      '</div><div class="rec-col"><div class="tiny muted">Xero</div>' +
+      (s.match ? '<div class="match"><div class="tiny">Match found</div><p style="margin:6px 0 12px">' + s.match.label + '</p><button class="btn ok" data-ok="' + s.id + '">OK</button> <button class="btn ghost">Find & match</button></div>'
+        : '<div class="stmt"><div class="tiny">Create</div><p class="predict">Predicted: ' + s.predict.contact + ' · ' + s.predict.account + ' ' + s.predict.desc + '</p>' +
+          '<button class="btn ok" data-createbank="' + s.id + '">OK</button> <button class="btn ghost">Add details</button></div>') +
+      '</div></div>';
+  }
+
+  function renderReports() {
+    if (S.view === 'pl') {
+      return '<h1>Profit and loss</h1><p class="lede">November 2026 · cash. Expense claims that are paid sit in these accounts.</p>' +
+        '<div class="card"><table class="data"><tbody>' +
+        [['Travel — airfare & taxi', 690.20],['Travel — lodging', 312.00],['Meals & entertainment', 101.20],['Computer software', 1299.99],['Training & conferences', 890.00],['Motor vehicle — mileage', 54.94]].map(function (r) {
+          return '<tr><td>' + r[0] + '</td><td class="num">' + money(r[1]) + '</td></tr>';
+        }).join('') + '<tr><td><strong>Total operating expenses</strong></td><td class="num"><strong>' + money(3348.33) + '</strong></td></tr></tbody></table></div>';
+    }
+    var rows = S.data.claims;
+    return '<h1>Expense claims summary</h1><div class="card"><table class="data"><thead><tr><th>User</th><th>Draft</th><th>Review</th><th>To pay</th><th>Paid</th></tr></thead><tbody>' +
+      ['maya','alex'].map(function (u) {
+        var cs = rows.filter(function (c) { return c.user === u; });
+        function sum(st) { return cs.filter(function (c) { return c.status === st; }).reduce(function (s,c) { return s + c.total; }, 0); }
+        return '<tr><td>' + PEOPLE[u].name + '</td><td class="num">' + money(sum('draft')) + '</td><td class="num">' + money(sum('review')) + '</td><td class="num">' + money(sum('pay')) + '</td><td class="num">' + money(sum('paid')) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function renderContacts() {
+    return '<h1>Contacts</h1><div class="card"><table class="data"><thead><tr><th>Name</th><th>Type</th><th>Email</th></tr></thead><tbody>' +
+      S.data.contacts.map(function (c) { return '<tr><td>' + c.name + '</td><td>' + c.type + '</td><td>' + c.email + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  }
+
+  function renderSettings() {
+    return '<h1>Settings</h1><div class="grid kpis">' +
+      '<div class="card widget"><h2>Users</h2>' + Object.keys(PEOPLE).map(function (id) { return '<div class="spread" style="padding:6px 0"><span>' + PEOPLE[id].name + '</span><span class="tiny muted">' + PEOPLE[id].role + '</span></div>'; }).join('') + '</div>' +
+      '<div class="card widget"><h2>Tax rates</h2><div>Tax Exempt (0%)</div><div>GST on Expenses (10%)</div><div class="tiny muted" style="margin-top:8px">Northwind Labs files US sales tax elsewhere; claims are mostly exempt.</div></div>' +
+      '<div class="card widget"><h2>Chart of accounts</h2>' + ACCOUNTS.map(function (a) { return '<div class="tiny">' + a[0] + ' · ' + a[1] + '</div>'; }).join('') + '<div class="tiny" style="margin-top:8px">855 · Expense claims clearing (liability, payments enabled)</div></div></div>';
+  }
+
+  function renderExpenseSettings() {
+    return '<h1>Expense settings</h1><p class="lede">Purchases → Expense settings. There is one approval level. Anyone who can approve sees every submitted claim.</p>' +
+      '<div class="grid kpis">' +
+      '<div class="card widget"><h2>Receipt analysis</h2><div class="spread"><span class="tiny">Xero Me reads supplier, date, and amount</span><i class="sw"></i></div></div>' +
+      '<div class="card widget"><h2>Default accounts</h2><div class="tiny">New expense · 431 Meals & entertainment</div><div class="tiny">New mileage · 610 Motor vehicle — mileage</div></div>' +
+      '<div class="card widget"><h2>Users</h2>' +
+        '<div class="spread" style="padding:6px 0"><span>Maya Chen</span><span class="tiny muted">Submit · personal card</span></div>' +
+        '<div class="spread" style="padding:6px 0"><span>Alex Rivera</span><span class="tiny muted">Submit · company Visa ••8821</span></div>' +
+        '<div class="spread" style="padding:6px 0"><span>Jordan Hale</span><span class="tiny muted">Approve</span></div>' +
+        '<div class="tiny muted" style="margin-top:8px">Company card spend becomes a spend money on approval — nothing to reimburse.</div></div>' +
+      '<div class="card widget"><h2>Mileage</h2><p class="tiny">Xero maps start and end but does not store a default rate. Staff type $0.67 / mi (IRS). Berlin week used 82 mi SF–San Jose.</p></div>' +
+      '</div>';
+  }
+
+  function renderPayRuns() {
+    var awaiting = S.data.claims.filter(function (c) { return c.status === 'pay'; });
+    return '<h1>Pay runs</h1><p class="lede">Xero Payroll does not pull claims automatically. Add a reimbursement line, then record the claim bill as paid from Expense claims clearing.</p>' +
+      (S.toast ? '<div class="toast" style="margin-bottom:12px">' + S.toast + '</div>' : '') +
+      '<div class="card"><table class="data"><thead><tr><th>Period</th><th>Status</th><th class="num">Expense reimbursements</th></tr></thead><tbody>' +
+      S.data.payRuns.map(function (p) {
+        return '<tr><td>' + p.period + '</td><td>' + badge(p.status === 'draft' ? 'draft' : 'paid') + '</td><td class="num">' + money(p.reimbursements) + '</td></tr>';
+      }).join('') + '</tbody></table></div>' +
+      '<h2 style="margin-top:20px;font-size:16px">Awaiting payment — add to 16–30 Nov</h2>' +
+      (awaiting.length ? awaiting.map(function (c) {
+        return '<div class="card widget spread" style="margin-top:8px"><div>' + c.title + '<div class="tiny muted">' + PEOPLE[c.user].name + ' · ' + money(c.total) + '</div></div>' +
+          (S.role === 'priya' ? '<button class="btn blue" data-act="topayroll" data-id="' + c.id + '">Add reimbursement line</button>' : '<span class="tiny muted">Adviser role pays this</span>') +
+        '</div>';
+      }).join('') : '<p class="muted">No approved claims waiting.</p>');
+  }
+
+  function renderPayItems() {
+    return '<h1>Pay items</h1><p class="lede">Reimbursement items post to a liability, never to an expense account — otherwise the cost hits P&L twice.</p>' +
+      '<div class="card"><table class="data"><thead><tr><th>Item</th><th>Type</th><th>Account</th></tr></thead><tbody>' +
+      '<tr><td>Salary</td><td>Wages</td><td>477 · Wages and salaries</td></tr>' +
+      '<tr><td>Expense reimbursement</td><td>Reimbursement</td><td>855 · Expense claims clearing</td></tr>' +
+      '</tbody></table></div>';
+  }
+
+  function renderPayEmployees() {
+    return '<h1>Employees</h1><div class="card"><table class="data"><thead><tr><th>Name</th><th>Pay calendar</th><th>Bank</th></tr></thead><tbody>' +
+      '<tr><td>Maya Chen</td><td>Twice monthly</td><td>Bank of America ••9912</td></tr>' +
+      '<tr><td>Alex Rivera</td><td>Twice monthly</td><td>Chase ••4401</td></tr>' +
+      '<tr><td>Jordan Hale</td><td>Twice monthly</td><td>Wells Fargo ••2280</td></tr>' +
+      '</tbody></table></div>';
+  }
+
+  function renderInvoices() {
+    return '<h1>Invoices</h1><p class="lede">Sales sit next to purchases so cash and expense rec stay in one product.</p>' +
+      '<div class="card"><table class="data"><thead><tr><th>To</th><th>Ref</th><th>Due</th><th class="num">Total</th></tr></thead><tbody>' +
+      '<tr><td>Helix GmbH</td><td>INV-1044</td><td>1 Dec 26</td><td class="num">' + money(4800) + '</td></tr>' +
+      '</tbody></table></div>';
+  }
+
+  function openNewClaim() {
+    $('modal').innerHTML = '<div class="overlay"><form class="dialog" id="nf"><h2>New expense claim</h2>' +
+      '<div class="field"><label>Type</label><select name="kind"><option value="expense">Expense claim</option><option value="mileage">Mileage claim</option></select></div>' +
+      '<div class="field"><label>Title</label><input name="title" value="Untitled claim" required></div>' +
+      '<table class="lines"><thead><tr><th>Date</th><th>Account</th><th>Description</th><th>Amount</th></tr></thead><tbody>' +
+      '<tr><td><input name="d1" type="date" value="2026-11-25"></td><td><select name="a1">' + ACCOUNTS.map(function (a) { return '<option value="' + a[0] + '">' + a[0] + ' ' + a[1] + '</option>'; }).join('') + '</select></td><td><input name="desc1" placeholder="What was it?"></td><td><input name="amt1" type="number" step="0.01" value="0"></td></tr></tbody></table>' +
+      '<p class="tiny muted">Receipt: click to attach a sample.</p><div id="rc" class="card widget" style="cursor:pointer">No receipt</div>' +
+      '<div class="spread" style="margin-top:12px"><button class="btn ghost" type="button" id="cx">Cancel</button><button class="btn primary" type="submit">Save draft</button></div></form></div>';
+    $('cx').onclick = function () { $('modal').innerHTML = ''; };
+    var rec = false;
+    $('rc').onclick = function () { rec = true; this.textContent = 'Receipt attached · pret-a-manger.jpg'; };
+    $('nf').onsubmit = function (e) {
+      e.preventDefault();
+      var f = e.target;
+      var amt = +f.amt1.value || 0;
+      var mileage = f.kind.value === 'mileage';
+      S.data.claims.unshift({
+        id: 'c' + Date.now(), user: S.role, date: f.d1.value, status: 'draft', total: amt, receipt: rec, title: f.title.value,
+        lines: [{ date: f.d1.value, account: mileage ? '610' : f.a1.value, desc: (mileage ? 'Mileage · staff typed rate $0.67/mi · ' : '') + (f.desc1.value || 'Expense'), amount: amt, tax: 'No VAT', receipt: rec }]
+      });
+      $('modal').innerHTML = '';
+      toast('Draft claim saved');
+      go('expenses', { tab: 'draft' });
+    };
+  }
+
+  function act(name, id) {
+    if (name === 'billpay') {
+      var b = S.data.bills.find(function (x) { return x.id === id; });
+      if (b) { b.status = 'paid'; toast('Bill marked paid'); }
+      render(); return;
+    }
+    var c = S.data.claims.find(function (x) { return x.id === id; });
+    if (!c) return;
+    if (name === 'submit') { c.status = 'review'; toast('Submitted for review'); }
+    if (name === 'approve') { c.status = 'pay'; toast('Approved — awaiting payment'); }
+    if (name === 'reject') { c.status = 'draft'; toast('Sent back to draft'); }
+    if (name === 'pay') { openPayClaim(c); return; }
+    if (name === 'topayroll') {
+      c.status = 'paid'; c.payHow = 'payroll';
+      var run = S.data.payRuns.find(function (p) { return p.status === 'draft'; });
+      if (run) run.reimbursements += c.total;
+      toast('Added to 16–30 Nov pay run · claim marked paid from clearing');
+    }
+    render();
+  }
+
+  function openPayClaim(c) {
+    $('modal').innerHTML = '<div class="overlay"><div class="dialog"><h2>Pay ' + c.title + '</h2><p class="tiny muted">' + money(c.total) + ' owed to ' + PEOPLE[c.user].name + '.</p>' +
+      '<button class="payopt" data-payhow="bank"><strong>Record bank payment</strong><div class="tiny muted">Pay from Checking ••1190. The statement line matches on Reconcile.</div></button>' +
+      '<button class="payopt" data-payhow="batch"><strong>Include in batch payment</strong><div class="tiny muted">Purchases → Bills → Awaiting payment → Batch payment. Export a bank file.</div></button>' +
+      '<button class="payopt" data-payhow="payroll"><strong>Add to next pay run</strong><div class="tiny muted">Reimbursement pay item → 855 Expense claims clearing. Then this bill is paid from clearing on payday.</div></button>' +
+      '<button class="btn ghost" type="button" id="cx">Cancel</button></div></div>';
+    $('cx').onclick = function () { $('modal').innerHTML = ''; };
+    document.querySelectorAll('[data-payhow]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var how = b.getAttribute('data-payhow');
+        c.status = 'paid'; c.payHow = how;
+        if (how === 'payroll') {
+          var run = S.data.payRuns.find(function (p) { return p.status === 'draft'; });
+          if (run) run.reimbursements += c.total;
+        }
+        $('modal').innerHTML = '';
+        toast(how === 'payroll' ? 'On the next pay run · paid from clearing' : (how === 'batch' ? 'Added to batch payment file' : 'Bank payment recorded'));
+        render();
+      });
+    });
+  }
+
+  function render() {
+    renderChrome();
+    var map = {
+      dashboard: renderDashboard,
+      expenses: renderExpenses,
+      claim: renderClaim,
+      purchases: renderPurchases,
+      bills: renderBills,
+      bill: renderBill,
+      invoices: renderInvoices,
+      quotes: function () { return '<h1>Quotes</h1><p class="lede">No open quotes.</p>'; },
+      pos: function () { return '<h1>Purchase orders</h1><p class="lede">No purchase orders this month.</p>'; },
+      rules: function () { return '<h1>Bank rules</h1><p class="lede">Create a rule from Reconcile when a payee repeats.</p>'; },
+      projects: function () { return '<h1>Projects</h1><p class="lede">Berlin customer week · Web Summit Lisbon</p>'; },
+      sales: renderInvoices,
+      reporting: renderReports,
+      bank: renderBank,
+      reconcile: renderReconcile,
+      accounts: function () { return '<h1>Chart of accounts</h1><div class="card"><table class="data"><tbody>' + ACCOUNTS.map(function (a) { return '<tr><td>' + a[0] + '</td><td>' + a[1] + '</td><td class="muted">Expenses</td></tr>'; }).join('') + '</tbody></table></div>'; },
+      tax: function () { return renderSettings(); },
+      pl: renderReports,
+      expense: renderReports,
+      contacts: renderContacts,
+      settings: renderSettings,
+      expsettings: renderExpenseSettings,
+      payroll: renderPayRuns,
+      payruns: renderPayRuns,
+      payitems: renderPayItems,
+      payemployees: renderPayEmployees
+    };
+    $('main').innerHTML = (map[S.view] || renderDashboard)();
+    $('main').querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { go(b.getAttribute('data-go')); }); });
+    $('subnav').querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { go(b.getAttribute('data-go')); }); });
+    $('main').querySelectorAll('[data-tab]').forEach(function (b) { b.addEventListener('click', function () { S.tab = b.getAttribute('data-tab'); render(); }); });
+    $('main').querySelectorAll('[data-claim]').forEach(function (b) { b.addEventListener('click', function () { go('claim', { selectedClaim: b.getAttribute('data-claim') }); }); });
+    $('main').querySelectorAll('[data-bill]').forEach(function (b) { b.addEventListener('click', function () { go('bill', { selectedBill: b.getAttribute('data-bill') }); }); });
+    $('main').querySelectorAll('[data-act]').forEach(function (b) { b.addEventListener('click', function () { act(b.getAttribute('data-act'), b.getAttribute('data-id')); }); });
+    $('main').querySelectorAll('[data-ok]').forEach(function (b) { b.addEventListener('click', function () { S.data.bank = S.data.bank.filter(function (x) { return x.id !== b.getAttribute('data-ok'); }); toast('Reconciled'); render(); }); });
+    $('main').querySelectorAll('[data-createbank]').forEach(function (b) { b.addEventListener('click', function () { S.data.bank = S.data.bank.filter(function (x) { return x.id !== b.getAttribute('data-createbank'); }); toast('Spend money created and reconciled'); render(); }); });
+    var nc = $('newClaim');
+    if (nc) nc.addEventListener('click', openNewClaim);
+    var nb = $('newBill');
+    if (nb) nb.addEventListener('click', openNewBill);
+  }
+
+  function openNewBill() {
+    $('modal').innerHTML = '<div class="overlay"><form class="dialog" id="bf"><h2>New bill</h2>' +
+      '<div class="field"><label>From</label><input name="contact" value="Office Supplies Co" required></div>' +
+      '<div class="field"><label>Reference</label><input name="ref" placeholder="Supplier invoice no."></div>' +
+      '<div class="field"><label>Amount (USD)</label><input name="total" type="number" step="0.01" value="186.40" required></div>' +
+      '<div class="spread" style="margin-top:12px"><button class="btn ghost" type="button" id="cx">Cancel</button><button class="btn primary" type="submit">Save draft</button></div></form></div>';
+    $('cx').onclick = function () { $('modal').innerHTML = ''; };
+    $('bf').onsubmit = function (e) {
+      e.preventDefault();
+      var f = e.target;
+      S.data.bills.unshift({ id: 'b' + Date.now(), contact: f.contact.value, date: '2026-11-25', due: '2026-12-25', status: 'draft', total: +f.total.value, ref: f.ref.value });
+      $('modal').innerHTML = '';
+      toast('Draft bill saved');
+      go('bills');
+    };
+  }
+
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $('modal').innerHTML = ''; });
+  render();
+})();
+</script>
+</body>
+</html>

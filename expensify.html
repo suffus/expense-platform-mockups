@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<!-- Project tags (PROJECT_TAGS.md): @modhr/documentation @modhr/expenses @/ux-ui-quality -->
+<!--
+  Unofficial Expensify full-suite review mockup.
+  Open in a browser. Offline, in-memory only. Hub: index.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expensify — Northwind Labs (mockup)</title>
+<style>
+:root {
+  --green: #03d47c;
+  --green-ink: #002e22;
+  --navy: #0c1b33;
+  --navy-2: #e8eaed;
+  --ink: #0c1b33;
+  --muted: #5c6b80;
+  --line: #e4e8ee;
+  --bg: #f6f6f4;
+  --card: #fff;
+  --warn: #c47b00;
+  --warn-bg: #fff6e0;
+  --bad: #d0423a;
+  --bad-bg: #fdecea;
+  --ok: #0a8a52;
+  --ok-bg: #e7f8ef;
+  --blue: #0185ff;
+  --rail: 80px;
+  --sans: "Expensify Neue", Inter, ui-sans-serif, system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font-family: var(--sans); color: var(--ink); background: #f6f6f4; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+
+.review {
+  display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center;
+  padding: 8px 14px; background: #111827; color: #e5e7eb; font-size: 12px;
+  border-bottom: 1px solid #1f2937;
+}
+.review strong { color: var(--green); font-weight: 650; }
+.review a { color: #93c5fd; }
+.seg { display: inline-flex; border: 1px solid #374151; border-radius: 8px; overflow: hidden; }
+.seg button { background: transparent; color: #9ca3af; border: 0; padding: 5px 10px; }
+.seg button[aria-pressed="true"] { background: #1f2937; color: #fff; }
+.review .grow { margin-inline-start: auto; color: #9ca3af; }
+
+.app { display: flex; height: calc(100vh - 41px); background: #fff; color: var(--ink); }
+.app.mobile { max-width: 390px; margin: 12px auto; height: calc(100vh - 65px); border-radius: 16px; overflow: hidden; border: 1px solid var(--line); }
+
+.rail {
+  width: var(--rail); background: #fff; color: #8b959e; border-right: 1px solid #f0f0ee;
+  display: flex; flex-direction: column; align-items: center; padding: 10px 0 14px; gap: 2px;
+}
+.logo {
+  width: 40px; height: 40px; border-radius: 12px; background: var(--green); color: var(--green-ink);
+  display: grid; place-items: center; font-weight: 800; margin-bottom: 8px; border: 0;
+}
+.rail button.nav {
+  width: 64px; min-height: 52px; border: 0; background: transparent; color: inherit;
+  border-radius: 12px; display: grid; place-items: center; gap: 2px; padding: 6px 0;
+}
+.rail button.nav svg { width: 22px; height: 22px; }
+.rail button.nav span { font-size: 11px; font-weight: 650; }
+.rail button.nav[aria-current="page"] { color: var(--green-ink); }
+.rail button.nav[aria-current="page"] svg { stroke: var(--green); }
+.rail button.plus { margin-top: 6px; background: var(--green); color: var(--green-ink); border-radius: 50%; width: 40px; height: 40px; border: 0; font-size: 22px; line-height: 1; }
+.rail .spacer { flex: 1; }
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%; border: 0; font-weight: 700; font-size: 12px; color: #fff;
+}
+.search-btn { margin-inline-start: auto; border: 0; background: transparent; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: var(--muted); }
+.search-btn:hover { background: var(--bg); }
+
+.stage { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.top {
+  height: 52px; background: #fff; border-bottom: 0;
+  display: flex; align-items: center; gap: 12px; padding: 0 24px;
+}
+.top h1 { font-size: 18px; margin: 0; font-weight: 650; letter-spacing: -0.02em; }
+.search {
+  margin-inline-start: auto; display: flex; align-items: center; gap: 8px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 20px; padding: 6px 12px; min-width: 220px;
+}
+.search input { border: 0; background: transparent; outline: none; width: 100%; }
+.main { flex: 1; overflow: auto; padding: 8px 28px 48px; background: #f6f6f4; }
+.main.pad0 { padding: 0; overflow: hidden; display: flex; }
+
+.card { background: var(--card); border: 0; border-radius: 16px; }
+.row { display: flex; align-items: center; gap: 12px; }
+.spread { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.muted { color: var(--muted); }
+.tiny { font-size: 12px; }
+.money { font-variant-numeric: tabular-nums; font-weight: 650; }
+h2 { font-size: 15px; margin: 0; }
+.grid { display: grid; gap: 16px; }
+.grid.kpis { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.kpi { padding: 16px 18px; }
+.kpi .lbl { font-size: 12px; color: var(--muted); }
+.kpi .val { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; margin-top: 4px; }
+
+.todo { display: flex; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); width: 100%; text-align: left; background: transparent; border-left: 0; border-right: 0; border-top: 0; }
+.todo:last-child { border-bottom: 0; }
+.todo:hover { background: #f7fafc; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); margin-top: 6px; flex: none; }
+.dot.warn { background: #f5b942; }
+.dot.bad { background: var(--bad); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border-radius: 20px; border: 1px solid transparent; padding: 8px 14px; font-weight: 650; font-size: 13px; background: transparent;
+}
+.btn.green { background: var(--green); color: var(--green-ink); }
+.btn.navy { background: var(--navy); color: #fff; }
+.btn.ghost { border-color: var(--line); background: #fff; }
+.btn.danger { background: var(--bad); color: #fff; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.chip {
+  display: inline-flex; align-items: center; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 650;
+  background: var(--bg); border: 1px solid var(--line);
+}
+.chip.ok { background: var(--ok-bg); color: var(--ok); border-color: transparent; }
+.chip.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.chip.bad { background: var(--bad-bg); color: var(--bad); border-color: transparent; }
+.chip.info { background: #e8f3ff; color: #0b63c2; border-color: transparent; }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.data th { text-align: left; font-size: 11px; color: var(--muted); font-weight: 650; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+table.data td { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+table.data tr.click { cursor: pointer; }
+table.data tr.click:hover { background: #f7fafc; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.merchant { font-weight: 650; }
+.sub { color: var(--muted); font-size: 12px; }
+
+.split { display: grid; grid-template-columns: 320px 1fr; height: 100%; }
+.listpane { background: #fff; border-right: 1px solid #f0f0ee; overflow: auto; }
+.listitem { display: flex; gap: 12px; padding: 12px 16px; width: 100%; text-align: left; background: transparent; border: 0; align-items: flex-start; }
+.listitem[aria-current="true"] { background: #f0f0ee; }
+.listitem:hover { background: #f6f6f4; }
+.thread { display: flex; flex-direction: column; min-width: 0; background: #fff; }
+.thread-h { padding: 14px 20px; background: #fff; border-bottom: 1px solid #f0f0ee; }
+.msgs { flex: 1; overflow: auto; padding: 20px; display: grid; gap: 10px; align-content: start; background: #fff; }
+.bubble { max-width: 72%; background: #f6f6f4; border: 0; border-radius: 12px; padding: 10px 12px; font-size: 14px; }
+.bubble.me { margin-inline-start: auto; background: var(--green); color: var(--green-ink); }
+.bubble.me .tiny { color: #064e3b; }
+.preview { background: #f6f6f4; border: 0; border-radius: 16px; padding: 14px; }
+.composer { display: flex; gap: 8px; padding: 12px 16px 16px; background: #fff; }
+.composer input { flex: 1; border: 0; background: #f6f6f4; border-radius: 20px; padding: 10px 16px; }
+.composer .btn.green { border-radius: 50%; width: 40px; height: 40px; padding: 0; }
+
+.bars { display: flex; align-items: flex-end; gap: 10px; height: 120px; padding: 8px 4px 0; }
+.bars i { flex: 1; background: var(--green); border-radius: 6px 6px 2px 2px; display: block; min-height: 8px; opacity: 0.85; }
+.bars span { display: block; text-align: center; font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+.overlay { position: fixed; inset: 0; background: rgb(12 27 51 / 0.45); display: grid; place-items: center; padding: 16px; z-index: 40; }
+.dialog { background: #fff; border-radius: 18px; width: min(100%, 520px); max-height: calc(100vh - 40px); overflow: auto; padding: 20px; }
+.field { display: grid; gap: 6px; margin-bottom: 12px; }
+.field label { font-size: 12px; font-weight: 650; }
+.field input, .field select, .field textarea {
+  border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: #fff;
+}
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.tabs button { border: 0; background: transparent; padding: 8px 10px; color: var(--muted); border-bottom: 2px solid transparent; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--green); font-weight: 650; }
+
+.receipt {
+  height: 180px; border: 1px dashed #c5d0e0; border-radius: 12px; background:
+    repeating-linear-gradient(45deg, #f7fafc, #f7fafc 8px, #eef2f6 8px, #eef2f6 16px);
+  display: grid; place-items: center; color: var(--muted); font-size: 12px; text-align: center; padding: 12px;
+}
+.receipt.ok { border-style: solid; background: #fff; color: var(--ink); }
+.side2 { display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 16px; align-items: start; }
+.ws-nav { display: flex; flex-direction: column; gap: 2px; }
+.ws-nav button { text-align: left; border: 0; background: transparent; padding: 8px 10px; border-radius: 8px; color: var(--muted); }
+.ws-nav button[aria-current="true"] { background: #e9fbf3; color: var(--ink); font-weight: 650; }
+
+.menu {
+  position: absolute; inset-inline-start: 8px; inset-block-end: 52px; background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(12 27 51 / 0.12); padding: 6px; min-width: 200px; z-index: 20;
+}
+.menu button { display: block; width: 100%; text-align: left; border: 0; background: transparent; padding: 8px 10px; border-radius: 8px; }
+.menu button:hover { background: var(--bg); }
+.rel { position: relative; }
+.sw { display: inline-flex; width: 36px; height: 20px; border-radius: 99px; background: var(--green); position: relative; vertical-align: middle; }
+.sw::after { content: ""; position: absolute; width: 16px; height: 16px; background: #fff; border-radius: 50%; top: 2px; right: 2px; }
+.sw.off { background: #c5c9ce; }
+.sw.off::after { right: auto; left: 2px; }
+.rule { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.rule .lbl { font-weight: 650; }
+.payopt { display: block; width: 100%; text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; }
+.payopt:hover { border-color: var(--green); }
+
+@media (max-width: 860px) {
+  .split { grid-template-columns: 1fr; }
+  .side2 { grid-template-columns: 1fr; }
+  .search { min-width: 0; width: 140px; }
+}
+.app.mobile .rail span { display: none; }
+.app.mobile .rail button.nav { height: 42px; }
+.app.mobile .main { padding: 14px; }
+.app.mobile .split { grid-template-columns: 1fr; }
+</style>
+</head>
+<body>
+<div class="review">
+  <strong>Review mockup</strong>
+  <span>Expensify suite</span>
+  <a href="index.html">All platforms</a>
+  <span>Role</span>
+  <div class="seg" id="roleSeg"></div>
+  <span>Viewport</span>
+  <div class="seg" id="vpSeg"></div>
+  <button class="btn ghost" id="resetBtn" type="button" style="color:#111;padding:4px 10px;border-radius:8px;">Reset data</button>
+  <span class="grow">Unofficial reconstruction · Northwind Labs · Nov 2026</span>
+</div>
+<div class="app" id="app">
+  <nav class="rail" aria-label="Expensify">
+    <button class="logo" type="button" data-go="home" title="Home">E</button>
+    <button class="nav" type="button" data-go="home" id="nav-home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
+    <button class="nav" type="button" data-go="inbox" id="nav-inbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg><span>Inbox</span></button>
+    <button class="nav" type="button" data-go="reports" id="nav-reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4h8l5 5v11H7z"/><path d="M15 4v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>Reports</span></button>
+    <button class="nav" type="button" data-go="spend" id="nav-spend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.5-3.5"/></svg><span>Spend</span></button>
+    <button class="nav" type="button" data-go="insights" id="nav-insights"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9m6 10V5m6 14v-7m6 7V8"/></svg><span>Insights</span></button>
+    <div class="spacer"></div>
+    <div class="rel">
+      <button class="plus" type="button" id="plusBtn" title="Create">+</button>
+      <div class="menu" id="plusMenu" hidden>
+        <button type="button" data-create="expense">Create expense</button>
+        <button type="button" data-create="distance">Track distance</button>
+        <button type="button" data-create="perdiem">Per diem</button>
+        <button type="button" data-create="split">Split expense</button>
+        <button type="button" data-create="report">Create report</button>
+        <button type="button" data-create="invoice">Create invoice</button>
+      </div>
+    </div>
+    <button class="avatar" type="button" data-go="account" id="nav-account">MC</button>
+  </nav>
+  <div class="stage">
+    <header class="top">
+      <h1 id="pageTitle">Home</h1>
+      <button class="search-btn" type="button" data-go="spend" title="Search Spend" id="searchBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.5-3.5"/></svg>
+      </button>
+      <input id="q" class="sr" placeholder="Search spend" autocomplete="off">
+    </header>
+    <div class="main" id="main"></div>
+  </div>
+</div>
+<div id="modal"></div>
+<script>
+(function () {
+  var PEOPLE = {
+    maya: { id: 'maya', name: 'Maya Chen', role: 'Sales', initials: 'MC', color: '#0a8a52' },
+    jordan: { id: 'jordan', name: 'Jordan Hale', role: 'Manager', initials: 'JH', color: '#0c1b33' },
+    priya: { id: 'priya', name: 'Priya Shah', role: 'Finance', initials: 'PS', color: '#0185ff' },
+    alex: { id: 'alex', name: 'Alex Rivera', role: 'Engineering', initials: 'AR', color: '#7c3aed' }
+  };
+  var ROLES = [
+    ['maya', 'Maya · submitter'],
+    ['jordan', 'Jordan · manager'],
+    ['priya', 'Priya · finance']
+  ];
+
+  function seed() {
+    return {
+      expenses: [
+        { id: 'e1', merchant: 'Uber', date: '2026-11-10', amount: 48.20, currency: 'USD', category: 'Travel', tag: 'Berlin', user: 'maya', receipt: true, report: 'r1', mcc: '4121', comment: 'SFO → office' },
+        { id: 'e2', merchant: 'Kimpton De Witt', date: '2026-11-11', amount: 312.00, currency: 'USD', category: 'Lodging', tag: 'Berlin', user: 'maya', receipt: true, report: 'r1', mcc: '7011', violation: 'Over $250 lodging cap', comment: '2 nights, customer week' },
+        { id: 'e3', merchant: 'Cafe De Reiger', date: '2026-11-12', amount: 86.40, currency: 'USD', category: 'Meals', tag: 'Berlin', user: 'maya', receipt: true, report: 'r1', mcc: '5812', attendees: 'Maya Chen, Anika Vogt (Helix)' },
+        { id: 'e4', merchant: 'Mileage', date: '2026-11-04', amount: 54.94, currency: 'USD', category: 'Mileage', tag: 'Domestic', user: 'maya', receipt: false, report: 'r1', miles: 82, rate: 0.67, comment: 'SF → San Jose' },
+        { id: 'e5', merchant: 'Amazon Web Services', date: '2026-11-03', amount: 1240.00, currency: 'USD', category: 'Software', tag: 'Infra', user: 'alex', receipt: true, report: null, card: true, mcc: '5734' },
+        { id: 'e6', merchant: 'Adobe', date: '2026-11-01', amount: 59.99, currency: 'USD', category: 'Software', tag: 'Design', user: 'alex', receipt: false, report: null, card: true, mcc: '5734' },
+        { id: 'e7', merchant: 'Web Summit', date: '2026-11-18', amount: 890.00, currency: 'USD', category: 'Training', tag: 'Lisbon', user: 'maya', receipt: true, report: 'r3', mcc: '8299' },
+        { id: 'e8', merchant: 'TAP Air Portugal', date: '2026-11-20', amount: 642.00, currency: 'USD', category: 'Travel', tag: 'Lisbon', user: 'maya', receipt: true, report: null, mcc: '4511' },
+        { id: 'e9', merchant: 'SmartScan · Pret A Manger', date: '2026-11-24', amount: 14.80, currency: 'USD', category: '', tag: '', user: 'maya', receipt: true, report: null, scan: true }
+      ],
+      reports: [
+        { id: 'r1', name: 'Berlin customer week', user: 'maya', status: 'submitted', submitted: '2026-11-14', total: 501.54, workspace: 'Northwind Labs', to: 'jordan', violations: 1 },
+        { id: 'r2', name: 'November card spend', user: 'alex', status: 'draft', submitted: null, total: 1299.99, workspace: 'Northwind Labs', to: 'jordan', violations: 0 },
+        { id: 'r3', name: 'Q4 conference', user: 'maya', status: 'approved', submitted: '2026-11-19', total: 890.00, workspace: 'Northwind Labs', to: 'jordan', violations: 0, paid: false },
+        { id: 'r4', name: 'October field travel', user: 'maya', status: 'paid', submitted: '2026-10-28', total: 214.10, workspace: 'Northwind Labs', to: 'jordan', paid: true }
+      ],
+      invoices: [
+        { id: 'i1', customer: 'Helix GmbH', amount: 4800, status: 'sent', due: '2026-12-01' },
+        { id: 'i2', customer: 'Northwind internal', amount: 0, status: 'draft', due: null }
+      ],
+      trips: [
+        { id: 't1', name: 'Berlin customer week', user: 'maya', start: '2026-11-10', end: '2026-11-14', status: 'complete', city: 'Berlin' },
+        { id: 't2', name: 'Web Summit Lisbon', user: 'maya', start: '2026-12-01', end: '2026-12-05', status: 'upcoming', city: 'Lisbon' }
+      ],
+      card: { last4: '4412', limit: 5000, spent: 1299.99, virtual: true },
+      messages: {
+        r1: [
+          { who: 'maya', text: 'Submitted Berlin customer week. Lodging is over the cap — two-night Kimpton because the preferred hotel was full.' },
+          { who: 'system', text: 'Policy: Lodging over $250. Report has 1 violation.' },
+          { who: 'jordan', text: 'Was Anika at the dinner? If yes I can approve the meal. Need a note on the hotel.' }
+        ]
+      },
+      cats: ['Travel', 'Lodging', 'Meals', 'Mileage', 'Software', 'Training', 'Office', 'Uncategorized'],
+      catRules: [
+        { name: 'Travel', max: 800, receipt: true, attendees: false },
+        { name: 'Lodging', max: 250, receipt: 'itemized', attendees: false },
+        { name: 'Meals', max: 75, receipt: true, attendees: true },
+        { name: 'Mileage', max: null, receipt: false, attendees: false },
+        { name: 'Software', max: 200, receipt: true, attendees: false },
+        { name: 'Training', max: 1500, receipt: true, attendees: false },
+        { name: 'Office', max: 100, receipt: true, attendees: false }
+      ],
+      tags: ['Berlin', 'Lisbon', 'Domestic', 'Infra', 'Design', 'Customer'],
+      members: ['maya', 'jordan', 'priya', 'alex'],
+      banks: { maya: { bank: 'Bank of America', last4: '9912' }, alex: { bank: 'Chase', last4: '4401' } },
+      payQueue: [],
+      distanceRates: [
+        { name: 'IRS 2026 standard', rate: 0.70, unit: 'mi', start: '2026-01-01', auto: true },
+        { name: 'Northwind personal car', rate: 0.67, unit: 'mi', start: '2026-01-01', auto: false }
+      ],
+      perDiems: [
+        { dest: 'United States · default', amount: 79, meals: 59, incidental: 20 },
+        { dest: 'Berlin, DE', amount: 128, meals: 98, incidental: 30 },
+        { dest: 'Lisbon, PT', amount: 112, meals: 86, incidental: 26 }
+      ]
+    };
+  }
+
+  var S = {
+    role: 'maya',
+    view: 'home',
+    vp: 'wide',
+    selectedReport: 'r1',
+    selectedExpense: 'e2',
+    selectedChat: 'r1',
+    spendType: 'Expense Report',
+    spendFilter: 'all',
+    wsTab: 'overview',
+    wsRuleTab: 'general',
+    q: '',
+    toast: '',
+    data: seed()
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function money(n, c) { return (c === 'EUR' ? '€' : '$') + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function person(id) { return PEOPLE[id]; }
+  function fmt(d) {
+    if (!d) return '—';
+    var p = d.split('-');
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1] + ' ' + (+p[2]);
+  }
+  function statusChip(st) {
+    var map = { draft: ['Draft', ''], submitted: ['Outstanding', 'info'], approved: ['Approved', 'ok'], paid: ['Paid', 'ok'], rejected: ['Rejected', 'bad'] };
+    var m = map[st] || [st, ''];
+    return '<span class="chip ' + m[1] + '">' + m[0] + '</span>';
+  }
+  function visibleReports() {
+    var d = S.data.reports;
+    if (S.role === 'maya') return d.filter(function (r) { return r.user === 'maya'; });
+    if (S.role === 'jordan') return d.filter(function (r) { return r.user === 'maya' || r.user === 'alex' || r.to === 'jordan'; });
+    return d;
+  }
+  function visibleExpenses() {
+    var d = S.data.expenses;
+    if (S.role === 'maya') return d.filter(function (e) { return e.user === 'maya'; });
+    if (S.role === 'jordan') return d.filter(function (e) { return e.user === 'maya' || e.user === 'alex'; });
+    return d;
+  }
+  function todos() {
+    var out = [];
+    if (S.role === 'maya') {
+      var drafts = S.data.reports.filter(function (r) { return r.user === 'maya' && r.status === 'draft'; });
+      var unreported = S.data.expenses.filter(function (e) { return !e.report && e.user === 'maya'; });
+      var n = drafts.length || (unreported.length ? 1 : 0);
+      if (n) out.push({ t: n + ' report to submit', go: 'reports', dot: '' });
+    }
+    if (S.role === 'jordan') {
+      var wait = S.data.reports.filter(function (r) { return r.status === 'submitted'; });
+      if (wait.length) out.push({ t: wait.length + ' report' + (wait.length === 1 ? '' : 's') + ' to approve', go: 'reports', dot: wait.some(function (r) { return r.violations; }) ? 'bad' : '' });
+    }
+    if (S.role === 'priya') {
+      var pay = S.data.reports.filter(function (r) { return r.status === 'approved' && !r.paid; });
+      if (pay.length) out.push({ t: 'Pay ' + pay.length + ' report' + (pay.length === 1 ? '' : 's'), go: 'reports', dot: '' });
+      out.push({ t: 'Export reports to QuickBooks', go: 'workspace', dot: 'warn' });
+    }
+    return out;
+  }
+
+  function go(view, extra) {
+    S.view = view;
+    if (extra) Object.keys(extra).forEach(function (k) { S[k] = extra[k]; });
+    if (view === 'spend' && S.q) { /* keep */ }
+    render();
+  }
+
+  function toast(msg) { S.toast = msg; render(); setTimeout(function () { if (S.toast === msg) { S.toast = ''; render(); } }, 2200); }
+
+  function renderChrome() {
+    $('app').className = 'app' + (S.vp === 'mobile' ? ' mobile' : '');
+    var me = person(S.role);
+    $('nav-account').textContent = me.initials;
+    $('nav-account').style.background = me.color;
+    ['home','inbox','reports','spend','insights','account'].forEach(function (v) {
+      var n = $('nav-' + v);
+      if (n) {
+        var on = S.view === v || (v === 'account' && (S.view === 'workspace' || S.view === 'wallet' || S.view === 'pay'));
+        if (on) n.setAttribute('aria-current', 'page'); else n.removeAttribute('aria-current');
+      }
+    });
+    var titles = { home: 'Home', inbox: 'Inbox', reports: 'Reports', report: 'Report', spend: 'Spend', expense: 'Expense', wallet: 'Wallet', account: 'Account', workspace: 'Workspace', invoices: 'Invoices', trips: 'Trips', insights: 'Insights' };
+    $('pageTitle').textContent = titles[S.view] || 'Expensify';
+    document.querySelector('.top').hidden = S.view === 'inbox';
+    var roleSeg = $('roleSeg');
+    if (!roleSeg.dataset.ready) {
+      ROLES.forEach(function (r) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = r[1]; b.dataset.role = r[0];
+        b.addEventListener('click', function () { S.role = r[0]; render(); });
+        roleSeg.append(b);
+      });
+      [['wide','Desktop'],['mobile','Mobile']].forEach(function (v) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = v[1]; b.dataset.vp = v[0];
+        b.addEventListener('click', function () { S.vp = v[0]; render(); });
+        $('vpSeg').append(b);
+      });
+      roleSeg.dataset.ready = '1';
+      $('resetBtn').addEventListener('click', function () { S.data = seed(); toast('Sample month restored'); });
+      $('q').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { S.q = e.target.value; go('spend'); }
+      });
+      document.querySelectorAll('[data-go]').forEach(function (b) {
+        b.addEventListener('click', function () { go(b.getAttribute('data-go')); });
+      });
+      $('plusBtn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        $('plusMenu').hidden = !$('plusMenu').hidden;
+      });
+      $('plusMenu').addEventListener('click', function (e) {
+        var t = e.target.closest('[data-create]');
+        if (!t) return;
+        $('plusMenu').hidden = true;
+        openCreate(t.getAttribute('data-create'));
+      });
+      document.addEventListener('click', function () { $('plusMenu').hidden = true; });
+    }
+    roleSeg.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.role === S.role ? 'true' : 'false'); });
+    $('vpSeg').querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.vp === S.vp ? 'true' : 'false'); });
+    $('q').value = S.q;
+  }
+
+  function renderHome() {
+    var t = todos();
+    var spend = [4.2, 6.1, 5.4, 8.9, 7.2, 4.8];
+    var months = ['Jun','Jul','Aug','Sep','Oct','Nov'];
+    var recent = visibleExpenses().slice().sort(function (a,b) { return a.date < b.date ? 1 : -1; }).slice(0, 5);
+    var awaiting = S.data.reports.filter(function (r) { return r.user === S.role && r.status === 'submitted'; }).reduce(function (s,r) { return s + r.total; }, 0);
+    var repaid = S.data.reports.filter(function (r) { return r.user === S.role && r.paid; }).reduce(function (s,r) { return s + r.total; }, 0);
+    return '<div class="grid" style="max-width:720px;margin:12px auto 0">' +
+      (S.toast ? '<div class="card" style="padding:10px 14px;background:#e9fbf3;border-color:#c6f0dc">' + S.toast + '</div>' : '') +
+      (S.role === 'priya' ? '<div class="card"><div style="padding:14px 16px 4px" class="tiny muted">Northwind Labs</div><button class="todo" type="button" data-nav="workspace"><i class="dot warn"></i><div><div>Time sensitive</div><div class="sub">QuickBooks connection needs re-auth</div></div></button></div>' : '') +
+      '<div class="card">' +
+        '<div style="padding:14px 16px 8px"><h2>To-dos</h2></div>' +
+        (t.length ? t.map(function (x) {
+          return '<button class="todo" type="button" data-nav="' + x.go + '"><i class="dot ' + x.dot + '"></i><div>' + x.t + '</div></button>';
+        }).join('') : '<p class="muted" style="padding:16px">You\'re all caught up</p>') +
+      '</div>' +
+      '<div class="card"><div style="padding:14px 16px 8px"><h2>Recently added</h2></div>' +
+        recent.map(function (e) {
+          return '<button class="todo" type="button" data-exp="' + e.id + '"><div class="avatar" style="width:28px;height:28px;background:' + person(e.user).color + ';display:grid;place-items:center;font-size:10px">' + person(e.user).initials + '</div><div class="grow" style="flex:1;text-align:left"><div class="merchant">' + e.merchant + '</div><div class="sub">' + fmt(e.date) + ' · ' + (e.category || 'Needs category') + '</div></div><div class="money">' + money(e.amount) + '</div></button>';
+        }).join('') + '</div>' +
+      '<div class="card"><div style="padding:14px 16px 8px"><h2>Upcoming travel</h2></div>' +
+        '<button class="todo" type="button" data-nav="trips"><div><div>Flight to Lisbon</div><div class="sub">In 6 days · TAP Air Portugal</div></div></button>' +
+        '<button class="todo" type="button" data-nav="trips"><div><div>Hotel in Lisbon</div><div class="sub">In 6 days · Web Summit</div></div></button>' +
+      '</div>' +
+      '<div class="card" style="padding:16px"><button class="btn ghost" type="button" data-nav="insights" style="margin:0 0 8px">Spend over time</button>' +
+        '<div class="bars">' + spend.map(function (n, i) { return '<div style="flex:1"><i style="height:' + (n / 9 * 100) + '%"></i><span>' + months[i] + '</span></div>'; }).join('') + '</div>' +
+        '<p class="tiny muted">Paid workspace · Northwind Labs</p></div>' +
+      '<div class="card"><div style="padding:14px 16px 8px"><h2>Your spend</h2></div>' +
+        '<button class="todo" type="button" data-nav="spend"><div>Awaiting approval</div><div class="money">' + money(awaiting) + '</div></button>' +
+        '<button class="todo" type="button" data-nav="spend"><div>Repaid last 30 days</div><div class="money">' + money(repaid) + '</div></button>' +
+        '<button class="todo" type="button" data-nav="wallet"><div>Recent transactions · ' + S.data.card.last4 + '</div><div class="money">' + money(S.data.card.spent) + '</div></button>' +
+      '</div>' +
+      '<div class="card" style="padding:16px"><h2>Announcements</h2><p class="tiny muted" style="margin-top:8px">Reports can be viewed as a table. Swipe expenses in Inbox on mobile.</p></div>' +
+    '</div>';
+  }
+
+  function renderInbox() {
+    var threads = [
+      { id: 'ws', title: 'Northwind Labs', sub: 'Workspace chat · submit expenses here', unread: false },
+      { id: 'r1', title: 'Berlin customer week', sub: 'Maya → Jordan · 1 violation', unread: S.data.reports.find(function (r) { return r.id === 'r1'; }).status === 'submitted' },
+      { id: 'concierge', title: 'Concierge', sub: 'Your virtual card ••4412 is active.', unread: false }
+    ];
+    var chat = S.selectedChat;
+    var body;
+    if (chat === 'r1') {
+      var r = S.data.reports.find(function (x) { return x.id === 'r1'; });
+      var msgs = (S.data.messages.r1 || []).map(function (m) {
+        if (m.who === 'system') return '<div class="tiny muted" style="text-align:center">' + m.text + '</div>';
+        return '<div class="bubble ' + (m.who === S.role ? 'me' : '') + '"><div class="tiny muted">' + person(m.who).name + '</div>' + m.text + '</div>';
+      }).join('');
+      var ex = S.data.expenses.filter(function (e) { return e.report === 'r1'; });
+      body = '<div class="thread-h spread"><div><h2>' + r.name + '</h2><div class="tiny muted">' + person(r.user).name + ' · ' + money(r.total) + ' · ' + statusChip(r.status) + '</div></div>' +
+        (S.role === 'jordan' && r.status === 'submitted' ? '<div class="row"><button class="btn green" data-act="approve" data-id="r1">Approve</button><button class="btn ghost" data-act="reject" data-id="r1">Hold</button></div>' : '<button class="btn ghost" data-rep="r1">Open report</button>') +
+        '</div><div class="msgs">' + msgs +
+        '<div class="preview"><div class="tiny muted">Expenses on this report</div>' +
+        ex.map(function (e) {
+          return '<div class="spread" style="padding:8px 0;border-bottom:1px solid var(--line)"><div><div class="merchant">' + e.merchant + '</div><div class="sub">' + (e.category || '—') + (e.violation ? ' · ' + e.violation : '') + '</div></div><div class="money">' + money(e.amount) + '</div></div>';
+        }).join('') + '</div></div>' +
+        '<form class="composer" id="chatForm"><input name="m" placeholder="Write a message…" autocomplete="off"><button class="btn green" type="submit" aria-label="Send">↑</button></form>';
+    } else if (chat === 'concierge') {
+      body = '<div class="thread-h"><h2>Concierge</h2></div><div class="msgs"><div class="bubble">Your virtual card ••4412 is active. Pret A Manger $14.80 SmartScanned a minute ago.</div></div>';
+    } else {
+      body = '<div class="thread-h"><h2>Northwind Labs</h2></div><div class="msgs"><div class="bubble">Workspace chat. Categories, tags and QuickBooks live under Account → Workspace.</div></div>';
+    }
+    var avatars = { ws: ['NL', '#03d47c', '#002e22'], r1: ['MC', '#0185ff', '#fff'], concierge: ['C', '#0c1b33', '#fff'] };
+    return '<div class="split" style="height:100%"><div class="listpane">' + threads.map(function (th) {
+      var av = avatars[th.id] || ['•', '#e4e8ee', '#0c1b33'];
+      return '<button class="listitem" data-chat="' + th.id + '"' + (chat === th.id ? ' aria-current="true"' : '') + '><span class="avatar" style="width:40px;height:40px;background:' + av[1] + ';color:' + av[2] + ';display:grid;place-items:center;font-size:12px;flex:none">' + av[0] + '</span><div><div class="merchant">' + th.title + (th.unread ? ' <span class="dot" style="display:inline-block;width:8px;height:8px;margin:0 0 1px 4px;vertical-align:middle"></span>' : '') + '</div><div class="sub">' + th.sub + '</div></div></button>';
+    }).join('') + '</div><div class="thread">' + body + '</div></div>';
+  }
+
+  function renderReports() {
+    var rows = visibleReports();
+    var mine = rows.filter(function (r) { return r.user === S.role || S.role !== 'maya'; });
+    var t = todos().filter(function (x) { return x.go === 'reports' || x.go === 'inbox'; });
+    return '<div class="grid">' +
+      (t.length ? '<div class="card"><div style="padding:12px 16px" class="tiny muted">To-dos</div>' + t.map(function (x) { return '<button class="todo" data-nav="' + x.go + '"><i class="dot ' + x.dot + '"></i>' + x.t + '</button>'; }).join('') + '</div>' : '') +
+      '<div class="spread"><h2>All reports</h2><div class="row">' +
+        (S.role === 'priya' && S.data.reports.some(function (r) { return r.status === 'approved' && !r.paid; }) ? '<button class="btn navy" data-act="bulkpay" data-id="">Pay approved</button>' : '') +
+        '<button class="btn green" data-create="report">New report</button></div></div>' +
+      '<div class="card" style="overflow:auto"><table class="data"><thead><tr><th>Report</th><th>From</th><th>Submitted</th><th>Status</th><th class="num">Total</th><th></th></tr></thead><tbody>' +
+      mine.map(function (r) {
+        var act = '';
+        if (S.role === 'jordan' && r.status === 'submitted') act = r.violations ? '<button class="btn ghost" data-rep="' + r.id + '">Review violations</button>' : '<button class="btn green" data-act="approve" data-id="' + r.id + '">Approve</button>';
+        if (S.role === 'priya' && r.status === 'approved' && !r.paid) act = '<button class="btn navy" data-act="pay" data-id="' + r.id + '">Pay</button>';
+        if (S.role === 'maya' && r.status === 'draft' && r.user === 'maya') act = '<button class="btn green" data-act="submit" data-id="' + r.id + '">Submit</button>';
+        return '<tr class="click" data-rep="' + r.id + '"><td><div class="merchant">' + r.name + '</div><div class="sub">' + r.workspace + (r.violations ? ' · ' + r.violations + ' violation' : '') + '</div></td><td>' + person(r.user).name + '</td><td>' + fmt(r.submitted) + '</td><td>' + statusChip(r.status) + (r.paid ? ' <span class="chip ok">Paid</span>' : '') + '</td><td class="num money">' + money(r.total) + '</td><td onclick="event.stopPropagation()">' + act + '</td></tr>';
+      }).join('') + '</tbody></table></div></div>';
+  }
+
+  function renderReport() {
+    var r = S.data.reports.find(function (x) { return x.id === S.selectedReport; });
+    if (!r) return '<p>Report not found.</p>';
+    var ex = S.data.expenses.filter(function (e) { return e.report === r.id; });
+    var canEdit = r.status === 'draft' && r.user === S.role;
+    var actions = '';
+    if (S.role === 'jordan' && r.status === 'submitted') actions = '<button class="btn green" data-act="approve" data-id="' + r.id + '">Approve</button><button class="btn ghost" data-act="reject" data-id="' + r.id + '">Reject</button>';
+    if (canEdit) actions = '<button class="btn ghost" data-create="expense">Add expense</button><button class="btn green" data-act="submit" data-id="' + r.id + '"' + (ex.length ? '' : ' disabled') + '>Submit</button>';
+    if (S.role === 'priya' && r.status === 'approved' && !r.paid) actions = '<button class="btn navy" data-act="pay" data-id="' + r.id + '">Pay</button><button class="btn ghost" data-act="export" data-id="' + r.id + '">Export</button>';
+    var loose = S.data.expenses.filter(function (e) { return !e.report && e.user === r.user; });
+    return '<div class="grid">' +
+      '<div class="spread"><div><button class="btn ghost" data-nav="reports">Back</button><h2 style="margin-top:10px">' + r.name + '</h2><div class="tiny muted">' + person(r.user).name + ' · to ' + person(r.to).name + ' · ' + statusChip(r.status) + '</div></div><div class="row">' + actions + '<div class="money" style="font-size:22px">' + money(r.total) + '</div></div></div>' +
+      (r.violations ? '<div class="card" style="padding:12px 16px;background:var(--warn-bg);border-color:#f3d7a3">This report has ' + r.violations + ' policy violation. Chat lives in Inbox.</div>' : '') +
+      (canEdit && !ex.length ? '<div class="card" style="padding:16px"><p class="muted" style="margin:0 0 12px">This report is empty. Add a new expense, or pull in unreported spend.</p><button class="btn green" data-create="expense">Add expense</button></div>' : '') +
+      (canEdit && loose.length ? '<div class="card"><div style="padding:12px 16px"><h2>Unreported expenses</h2><p class="tiny muted">Add these to this report.</p></div>' + loose.map(function (e) {
+        return '<div class="spread" style="padding:10px 16px;border-top:1px solid var(--line)"><div><div class="merchant">' + e.merchant + '</div><div class="sub">' + fmt(e.date) + ' · ' + (e.category || 'Needs category') + '</div></div><div class="row"><span class="money">' + money(e.amount) + '</span><button class="btn ghost" data-act="attach" data-id="' + e.id + '">Add</button></div></div>';
+      }).join('') + '</div>' : '') +
+      '<div class="card" style="overflow:auto"><table class="data"><thead><tr><th>Date</th><th>Merchant</th><th>Category</th><th>Tag</th><th></th><th class="num">Amount</th></tr></thead><tbody>' +
+      (ex.length ? ex.map(function (e) {
+        return '<tr class="click" data-exp="' + e.id + '"><td>' + fmt(e.date) + '</td><td><div class="merchant">' + e.merchant + '</div><div class="sub">' + (e.comment || '') + '</div></td><td>' + (e.category || '—') + '</td><td>' + (e.tag || '—') + '</td><td>' + (e.violation ? '<span class="chip warn">Violation</span>' : '') + (e.receipt ? '<span class="chip">Receipt</span>' : '') + '</td><td class="num money">' + money(e.amount, e.currency) + '</td></tr>';
+      }).join('') : '<tr><td colspan="6" class="muted">No expenses on this report yet.</td></tr>') + '</tbody></table></div>' +
+      '<div class="card" style="padding:16px"><h2>Report chat</h2><p class="muted tiny">Same thread as Inbox. Comments attach to the report, not email.</p><button class="btn ghost" data-chat="r1" style="margin-top:8px">Open in Inbox</button></div>' +
+    '</div>';
+  }
+
+  function renderSpend() {
+    var type = S.spendType;
+    var q = (S.q || '').toLowerCase();
+    var tabs = ['Expense Report', 'Expense', 'Chat', 'Invoice', 'Trip', 'Task'];
+    var body;
+    if (type === 'Expense') {
+      var rows = visibleExpenses().filter(function (e) { return !q || (e.merchant + e.category + e.tag).toLowerCase().indexOf(q) >= 0; });
+      body = '<table class="data"><thead><tr><th>Merchant</th><th>From</th><th>Category</th><th>Date</th><th class="num">Amount</th></tr></thead><tbody>' +
+        rows.map(function (e) {
+          return '<tr class="click" data-exp="' + e.id + '"><td class="merchant">' + e.merchant + (e.scan ? ' <span class="chip warn">Scan</span>' : '') + (e.card ? ' <span class="chip info">Card</span>' : '') + '</td><td>' + person(e.user).name + '</td><td>' + (e.category || 'Needs category') + '</td><td>' + fmt(e.date) + '</td><td class="num money">' + money(e.amount) + '</td></tr>';
+        }).join('') + '</tbody></table>';
+    } else if (type === 'Invoice') {
+      body = S.data.invoices.map(function (i) { return '<div class="spread" style="padding:12px 16px;border-bottom:1px solid var(--line)"><div><div class="merchant">' + i.customer + '</div><div class="sub">' + i.status + '</div></div><div class="money">' + money(i.amount) + '</div></div>'; }).join('');
+    } else if (type === 'Trip') {
+      body = S.data.trips.map(function (t) { return '<div class="spread" style="padding:12px 16px;border-bottom:1px solid var(--line)"><div><div class="merchant">' + t.name + '</div><div class="sub">' + t.city + ' · ' + fmt(t.start) + '–' + fmt(t.end) + '</div></div><span class="chip">' + t.status + '</span></div>'; }).join('');
+    } else {
+      var rows = visibleReports().filter(function (r) { return !q || r.name.toLowerCase().indexOf(q) >= 0; });
+      body = '<table class="data"><thead><tr><th>Report</th><th>From</th><th>Status</th><th class="num">Total</th></tr></thead><tbody>' +
+        rows.map(function (r) {
+          return '<tr class="click" data-rep="' + r.id + '"><td class="merchant">' + r.name + '</td><td>' + person(r.user).name + '</td><td>' + statusChip(r.status) + '</td><td class="num money">' + money(r.total) + '</td></tr>';
+        }).join('') + '</tbody></table>';
+    }
+    var ready = S.data.reports.filter(function (r) { return r.status === 'approved' && !r.paid; });
+    var filt = S.spendFilter || 'all';
+    if (type === 'Expense Report' && filt === 'ready') {
+      body = '<table class="data"><thead><tr><th>Report</th><th>From</th><th>Status</th><th class="num">Total</th><th></th></tr></thead><tbody>' +
+        (ready.length ? ready.map(function (r) {
+          return '<tr class="click" data-rep="' + r.id + '"><td class="merchant">' + r.name + '</td><td>' + person(r.user).name + '</td><td>' + statusChip(r.status) + '</td><td class="num money">' + money(r.total) + '</td><td onclick="event.stopPropagation()">' + (S.role === 'priya' ? '<button class="btn navy" data-act="pay" data-id="' + r.id + '">Pay</button>' : '') + '</td></tr>';
+        }).join('') : '<tr><td colspan="5" class="muted">Nothing ready to pay.</td></tr>') + '</tbody></table>';
+    }
+    return '<div class="grid"><div class="card" style="padding:10px 12px 0"><div class="tabs">' +
+      tabs.map(function (t) { return '<button type="button" data-spend="' + t + '" aria-selected="' + (type === t) + '">' + t + '</button>'; }).join('') +
+      '</div>' + (type === 'Expense Report' ? '<div class="row" style="padding:8px 4px 10px"><button class="btn ghost" data-sfilter="all" style="' + (filt === 'all' ? 'border-color:var(--green)' : '') + '">All</button><button class="btn ghost" data-sfilter="ready" style="' + (filt === 'ready' ? 'border-color:var(--green)' : '') + '">Ready to pay (' + ready.length + ')</button></div>' : '') +
+      '</div><div class="card" style="overflow:auto">' + body + '</div></div>';
+  }
+
+  function renderExpense() {
+    var e = S.data.expenses.find(function (x) { return x.id === S.selectedExpense; });
+    if (!e) return '<p>Missing expense.</p>';
+    return '<div class="side2"><div class="grid">' +
+      '<div class="spread"><button class="btn ghost" data-nav="spend">Back to Spend</button>' + (e.report ? '<button class="btn ghost" data-rep="' + e.report + '">On report</button>' : '<span class="chip warn">Unreported</span>') + '</div>' +
+      '<div class="card" style="padding:16px"><div class="spread"><div><h2>' + e.merchant + '</h2><div class="tiny muted">' + fmt(e.date) + ' · ' + person(e.user).name + '</div></div><div class="money" style="font-size:24px">' + money(e.amount, e.currency) + '</div></div>' +
+      '<div class="grid" style="grid-template-columns:1fr 1fr;margin-top:14px">' +
+      field('Category', e.category || 'Needs category') + field('Tag', e.tag || '—') + field('MCC', e.mcc || '—') + field('Paid on', e.card ? 'Expensify Card ••4412' : 'Personal') +
+      '</div>' + (e.attendees ? '<p class="tiny" style="margin-top:12px">Attendees: ' + e.attendees + '</p>' : '') +
+      field('Reimbursable', e.card ? 'No · company card' : 'Yes · personal') +
+      (e.violation ? '<p class="tiny" style="margin-top:12px;color:var(--warn)">' + e.violation + '</p>' : '') +
+      (e.miles ? '<p class="tiny" style="margin-top:12px">' + e.miles + ' mi × $' + e.rate + ' · Northwind personal car rate</p>' : '') +
+      '</div></div>' +
+      '<div class="receipt ' + (e.receipt ? 'ok' : '') + '">' + (e.receipt ? '<div><strong>Receipt</strong><br>' + e.merchant + '<br>' + money(e.amount) + '<br>' + fmt(e.date) + '</div>' : 'No receipt yet') + '</div>' +
+      '</div>';
+  }
+  function field(l, v) { return '<div class="field"><label>' + l + '</label><div>' + v + '</div></div>'; }
+
+  function renderWallet() {
+    var c = S.data.card;
+    var tx = S.data.expenses.filter(function (e) { return e.card; });
+    return '<div class="grid">' +
+      '<div class="card" style="padding:20px;background:linear-gradient(135deg,#0c1b33,#1d4a3a);color:#fff;border:0">' +
+        '<div class="tiny" style="opacity:.8">Expensify Card · virtual</div>' +
+        '<div style="font-size:22px;letter-spacing:.2em;margin:18px 0">•••• •••• •••• ' + c.last4 + '</div>' +
+        '<div class="spread"><span>' + person(S.role === 'alex' || S.role === 'priya' ? 'alex' : S.role).name + '</span><span>Limit ' + money(c.limit) + '</span></div>' +
+      '</div>' +
+      '<div class="grid kpis"><div class="card kpi"><div class="lbl">Spent this period</div><div class="val">' + money(c.spent) + '</div></div><div class="card kpi"><div class="lbl">Unreported card</div><div class="val">' + tx.filter(function (e) { return !e.report; }).length + '</div></div></div>' +
+      '<div class="card"><div style="padding:12px 16px"><h2>Card feed</h2></div><table class="data"><tbody>' +
+      tx.map(function (e) { return '<tr class="click" data-exp="' + e.id + '"><td>' + fmt(e.date) + '</td><td class="merchant">' + e.merchant + '</td><td>' + (e.report ? 'On report' : '<span class="chip warn">Unreported</span>') + '</td><td class="num money">' + money(e.amount) + '</td></tr>'; }).join('') +
+      '</tbody></table></div></div>';
+  }
+
+  function renderAccount() {
+    var me = person(S.role);
+    var bank = S.data.banks[S.role] || S.data.banks.maya;
+    return '<div class="side2"><div class="card" style="padding:18px">' +
+      '<div class="row"><div class="avatar" style="background:' + me.color + ';width:48px;height:48px;display:grid;place-items:center">' + me.initials + '</div><div><h2>' + me.name + '</h2><div class="sub">' + me.role + ' · ' + S.role + '@northwind.example</div></div></div>' +
+      '<div class="grid" style="margin-top:16px"><button class="todo" data-nav="wallet">Wallet and Expensify Card</button>' +
+      '<button class="todo" data-nav="workspace">Northwind Labs workspace</button>' +
+      '<button class="todo" data-nav="invoices">Invoices</button>' +
+      '<button class="todo" data-nav="trips">Trips</button></div>' +
+      '</div><div class="grid"><div class="card" style="padding:18px"><h2>Personal bank</h2><p class="tiny muted">Used for ACH reimbursements from the workspace.</p><div class="spread" style="margin-top:10px"><div>' + bank.bank + ' · ••' + bank.last4 + '</div><span class="chip ok">Verified</span></div></div>' +
+      '<div class="card" style="padding:18px"><h2>Preferences</h2><p class="muted tiny">Theme, notifications, and SmartScan email: receipts@expensify.com forwarded from Maya.</p></div></div></div>';
+  }
+
+  function renderWorkspace() {
+    if (S.role !== 'priya' && S.role !== 'jordan') {
+      return '<div class="card" style="padding:24px"><h2>Northwind Labs</h2><p class="muted">Workspace admin is a finance role in this mockup. Switch to Priya to edit Rules, Workflows, and Reimbursements.</p></div>';
+    }
+    var tab = S.wsTab;
+    var tabs = [
+      ['overview','Overview'],['members','Members'],['workflows','Workflows'],['categories','Categories'],['tags','Tags'],
+      ['taxes','Taxes'],['distance','Distance rates'],['perdiem','Per diem'],['rules','Rules'],['reimburse','Reimbursements'],
+      ['accounting','Accounting'],['cards','Company cards'],['expensifycard','Expensify Card'],['more','More features']
+    ];
+    var inner = '';
+    if (tab === 'overview') inner = '<p>Control plan · USD · Paid workspace.</p><p class="tiny muted" style="margin-top:8px">Policy PDF: <strong>Northwind-expense-policy-2026.pdf</strong> is visible to every member. Uploaded May 2026.</p><div class="grid kpis" style="margin-top:14px"><div class="kpi card"><div class="lbl">Members</div><div class="val">4</div></div><div class="kpi card"><div class="lbl">Rules on</div><div class="val">12</div></div><div class="kpi card"><div class="lbl">Ready to pay</div><div class="val">' + S.data.reports.filter(function (r) { return r.status === 'approved' && !r.paid; }).length + '</div></div></div>';
+    if (tab === 'members') inner = S.data.members.map(function (id) { var p = person(id); return '<div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><div class="row"><div class="avatar" style="background:' + p.color + ';width:28px;height:28px;display:grid;place-items:center;font-size:10px">' + p.initials + '</div>' + p.name + '</div><span class="chip">' + p.role + '</span></div>'; }).join('');
+    if (tab === 'categories') inner = '<p class="tiny muted" style="margin-bottom:8px">Category rules override the workspace max. Lodging requires an itemized receipt. Meals require attendees over $75.</p>' + S.data.catRules.map(function (c) {
+      return '<div class="spread" style="padding:8px 0;border-bottom:1px solid var(--line)"><div><div>' + c.name + '</div><div class="sub">GL ' + (4000 + c.name.length) + (c.attendees ? ' · attendees required' : '') + (c.receipt === 'itemized' ? ' · itemized receipt' : (c.receipt ? ' · receipt' : '')) + '</div></div><span class="sub">' + (c.max != null ? 'Max ' + money(c.max) : 'No cap') + '</span></div>';
+    }).join('');
+    if (tab === 'tags') inner = S.data.tags.map(function (c) { return '<div class="spread" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>' + c + '</span><span class="sub">Tag</span></div>'; }).join('');
+    if (tab === 'taxes') inner = '<div class="rule"><div><div class="lbl">Track tax</div><div class="sub">Enabled · US · no VAT on domestic claims</div></div><i class="sw"></i></div><div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><span>Tax Exempt</span><span class="sub">0%</span></div><div class="spread" style="padding:10px 0"><span>GST on expenses</span><span class="sub">10% · unused this month</span></div>';
+    if (tab === 'distance') inner = '<p class="tiny muted" style="margin-bottom:8px">Members create distance expenses from the + menu. Auto-update writes a new IRS rate when the government publishes one.</p>' + S.data.distanceRates.map(function (d) {
+      return '<div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><div><div>' + d.name + '</div><div class="sub">From ' + fmt(d.start) + (d.auto ? ' · auto-update' : '') + '</div></div><span class="money">$' + d.rate.toFixed(2) + '/' + d.unit + '</span></div>';
+    }).join('') + '<p class="tiny muted" style="margin-top:10px">Maya’s SF–San Jose claim used Northwind personal car at $0.67 × 82 mi.</p>';
+    if (tab === 'perdiem') inner = '<p class="tiny muted" style="margin-bottom:8px">Daily allowance by destination. Members create a per diem expense from +.</p>' + S.data.perDiems.map(function (d) {
+      return '<div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><div><div>' + d.dest + '</div><div class="sub">Meals ' + money(d.meals) + ' · incidental ' + money(d.incidental) + '</div></div><span class="money">' + money(d.amount) + '/day</span></div>';
+    }).join('');
+    if (tab === 'rules') {
+      var rt = S.wsRuleTab;
+      var rtabs = [['general','General'],['card','Card restrictions'],['defaults','Expense defaults'],['fields','Field requirements'],['flag','Flag for review'],['agents','Agents']];
+      inner = '<div class="tabs" style="margin-bottom:8px">' + rtabs.map(function (t) { return '<button type="button" data-ruletab="' + t[0] + '" aria-selected="' + (rt === t[0]) + '">' + t[1] + '</button>'; }).join('') + '</div>';
+      if (rt === 'general') inner +=
+        '<div class="rule"><div><div class="lbl">Flag expenses older than</div><div class="sub">60 days · will not auto-submit</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div class="lbl">Flag expenses above amount</div><div class="sub">$500 unless a category rule is lower</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div class="lbl">Require receipts</div><div class="sub">Receipt over $25 · itemized lodging always</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div class="lbl">Require fields</div><div class="sub">Category on every expense · tag on travel</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div class="lbl">Cash expenses</div><div class="sub">Default reimbursable · members can change</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div class="lbl">eReceipts</div><div class="sub">Auto-create for most USD card transactions</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div class="lbl">Attendee tracking</div><div class="sub">Per-person cost on meals</div></div><i class="sw"></i></div>' +
+        '<div class="rule"><div><div class="lbl">Prohibited expenses</div><div class="sub">Alcohol, gambling, tobacco, gift cards, handwritten receipts</div></div><i class="sw"></i></div>';
+      if (rt === 'card') inner += '<div class="rule"><div><div class="lbl">Merchant locks</div><div class="sub">Off on Expensify Cards this month</div></div><i class="sw off"></i></div><div class="rule"><div><div class="lbl">Require company cards for all purchases</div><div class="sub">Flags cash, mileage, and per diem</div></div><i class="sw off"></i></div>';
+      if (rt === 'defaults') inner += '<p class="tiny">Merchant rules auto-set category, tag, billable, and reimbursable. Pret A Manger → Meals, not reimbursable if on card.</p><div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><div>Uber / Lyft<div class="sub">Category Travel · reimbursable</div></div><span class="chip">Merchant rule</span></div><div class="spread" style="padding:10px 0"><div>Amazon Web Services<div class="sub">Category Software · not reimbursable (card)</div></div><span class="chip">Merchant rule</span></div>';
+      if (rt === 'fields') inner += '<p class="tiny">Require or waive fields per category.</p><div class="spread" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>Meals</span><span class="sub">Require attendees + description</span></div><div class="spread" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>Lodging</span><span class="sub">Require itemized receipt</span></div><div class="spread" style="padding:8px 0"><span>Mileage</span><span class="sub">Don’t require receipt</span></div>';
+      if (rt === 'flag') inner += '<p class="tiny">Kimpton De Witt on Berlin customer week is flagged: lodging $312 vs $250 cap.</p><div class="spread" style="padding:8px 0"><span>1 open violation</span><button class="btn ghost" data-rep="r1">Review in report</button></div>';
+      if (rt === 'agents') inner += '<p class="tiny">Agent rules use natural language. Example: “If lodging is over cap and the preferred hotel was full, allow Jordan to approve without finance.”</p><div class="chip">Not configured</div>';
+    }
+    if (tab === 'workflows') inner =
+      '<div class="rule"><div><div class="lbl">Add approvals</div><div class="sub">Maya → Jordan. Over $500 or any violation also routes to Priya. Shared approver can send different next hops.</div></div><i class="sw"></i></div>' +
+      '<div class="rule"><div><div class="lbl">Delayed submission</div><div class="sub">Weekly on Sundays, Pacific. Expenses with violations stay on an open report until fixed.</div></div><i class="sw"></i></div>' +
+      '<div class="rule"><div><div class="lbl">Out-of-office delegate</div><div class="sub">Jordan → Priya when Jordan is away</div></div><i class="sw"></i></div>' +
+      '<div class="rule"><div><div class="lbl">Auto-reporting</div><div class="sub">New expenses join the open report for that member</div></div><i class="sw"></i></div>' +
+      '<p class="tiny muted" style="margin-top:10px">Approvals also land in Inbox as a report chat. Admins can reject a report without taking control.</p>';
+    if (tab === 'reimburse') inner =
+      '<div class="rule"><div><div class="lbl">How employees get paid</div><div class="sub">ACH from Checking ••1190 to each member’s personal bank. Wallet is a fallback.</div></div><i class="sw"></i></div>' +
+      '<div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><span>Company bank</span><span class="sub">Checking ••1190</span></div>' +
+      '<div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><span>Maya Chen</span><span class="sub">' + S.data.banks.maya.bank + ' ••' + S.data.banks.maya.last4 + '</span></div>' +
+      '<div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><span>Alex Rivera</span><span class="sub">' + S.data.banks.alex.bank + ' ••' + S.data.banks.alex.last4 + '</span></div>' +
+      '<p class="tiny muted" style="margin-top:12px">Pay outside Expensify marks the report reimbursed for a payroll or check run. Finance uses Spend → Ready to pay, then Pay. Bulk pay is available on approved reports.</p>' +
+      '<button class="btn green" style="margin-top:12px" type="button" data-sfilter="ready">Open Ready to pay</button>';
+    if (tab === 'accounting') inner = '<p>Connected to QuickBooks Online · Northwind Labs.</p><p class="tiny muted" style="margin-top:8px">Export approved reports. Non-reimbursable card spend posts as a journal; reimbursable ACH posts as a bill payment. Custom templates export at report or expense level.</p><button class="btn green" style="margin-top:12px" type="button" data-act="export">Export outstanding</button>';
+    if (tab === 'cards') inner = '<p>Visa commercial feed · assigned to Maya (••4410) and Alex (••8821). CSV import is available if a bank is not connected. Unreported feed is in Wallet.</p><div class="spread" style="padding:10px 0;border-bottom:1px solid var(--line)"><span>Alex Rivera · ••8821</span><span class="chip warn">2 unreported</span></div><div class="spread" style="padding:10px 0"><span>Maya Chen · ••4410</span><span class="chip ok">Current</span></div>';
+    if (tab === 'expensifycard') inner = '<p>Workspace-issued Expensify Cards. Maya has a virtual card ••4412. Limit $5,000. Merchant locks are off. SmartScan still attaches receipts.</p><button class="btn ghost" style="margin-top:12px" data-nav="wallet">Open Wallet</button>';
+    if (tab === 'more') inner = '<div class="rule"><div><div class="lbl">Rules</div><div class="sub">On · Control plan</div></div><i class="sw"></i></div><div class="rule"><div><div class="lbl">Distance rates</div><div class="sub">On</div></div><i class="sw"></i></div><div class="rule"><div><div class="lbl">Per diem</div><div class="sub">On</div></div><i class="sw"></i></div><div class="rule"><div><div class="lbl">Company cards</div><div class="sub">On</div></div><i class="sw"></i></div><div class="rule"><div><div class="lbl">Expensify Card</div><div class="sub">On</div></div><i class="sw"></i></div><div class="rule"><div><div class="lbl">Invoices</div><div class="sub">On</div></div><i class="sw"></i></div><div class="rule"><div><div class="lbl">Travel</div><div class="sub">On · central billing</div></div><i class="sw"></i></div>';
+    return '<div class="side2"><nav class="ws-nav card" style="padding:8px">' + tabs.map(function (t) {
+      return '<button type="button" data-ws="' + t[0] + '"' + (tab === t[0] ? ' aria-current="true"' : '') + '>' + t[1] + '</button>';
+    }).join('') + '</nav><div class="card" style="padding:18px"><h2>' + tabs.filter(function (t) { return t[0] === tab; })[0][1] + '</h2><div style="margin-top:12px">' + inner + '</div></div></div>';
+  }
+
+  function renderSimpleList(title, items) {
+    return '<div class="card"><div style="padding:14px 16px"><h2>' + title + '</h2></div>' + items + '</div>';
+  }
+
+  function draftReportsFor(user) {
+    return S.data.reports.filter(function (r) { return r.user === user && r.status === 'draft'; });
+  }
+  function targetReportId() {
+    var cur = S.data.reports.find(function (x) { return x.id === S.selectedReport; });
+    if (S.view === 'report' && cur && cur.user === S.role && cur.status === 'draft') return cur.id;
+    var drafts = draftReportsFor(S.role);
+    return drafts.length ? drafts[0].id : '';
+  }
+  function recountReport(id) {
+    var r = S.data.reports.find(function (x) { return x.id === id; });
+    if (!r) return;
+    r.total = S.data.expenses.filter(function (e) { return e.report === id; }).reduce(function (s, e) { return s + e.amount; }, 0);
+    r.violations = S.data.expenses.filter(function (e) { return e.report === id && e.violation; }).length;
+  }
+  function saveExpense(fields) {
+    var exp = {
+      id: 'e' + Date.now(),
+      merchant: fields.merchant,
+      date: fields.date || '2026-11-25',
+      amount: +fields.amount,
+      currency: 'USD',
+      category: fields.category || '',
+      tag: fields.tag || '',
+      user: S.role,
+      receipt: !!fields.receipt,
+      report: fields.report || null
+    };
+    S.data.expenses.unshift(exp);
+    if (exp.report) recountReport(exp.report);
+    return exp;
+  }
+
+  function openCreate(kind) {
+    if (kind === 'report') {
+      var id = 'r' + Date.now();
+      S.data.reports.unshift({ id: id, name: 'Untitled report', user: S.role, status: 'draft', submitted: null, total: 0, workspace: 'Northwind Labs', to: 'jordan', violations: 0 });
+      toast('Report created. Add expenses to it.');
+      go('report', { selectedReport: id });
+      return;
+    }
+    if (kind === 'invoice') { go('invoices'); return; }
+    if (kind === 'perdiem') {
+      $('modal').innerHTML = '<div class="overlay"><form class="dialog" id="cf"><h2>Per diem</h2>' +
+        '<div class="field"><label>Destination</label><select name="dest">' + S.data.perDiems.map(function (d) { return '<option value="' + d.amount + '">' + d.dest + ' · ' + money(d.amount) + '/day</option>'; }).join('') + '</select></div>' +
+        '<div class="field"><label>Days</label><input name="days" type="number" value="1" min="1"></div>' +
+        '<div class="spread" style="margin-top:12px"><button class="btn ghost" type="button" id="cx">Cancel</button><button class="btn green" type="submit">Save</button></div></form></div>';
+      $('cx').onclick = function () { $('modal').innerHTML = ''; };
+      $('cf').onsubmit = function (e) {
+        e.preventDefault();
+        var f = e.target;
+        var amt = +f.dest.value * (+f.days.value || 1);
+        var destRep = targetReportId();
+        saveExpense({ merchant: 'Per diem', amount: amt, category: 'Meals', receipt: false, report: destRep || null });
+        $('modal').innerHTML = '';
+        toast(destRep ? 'Per diem added to the report' : 'Per diem saved');
+        if (destRep) go('report', { selectedReport: destRep }); else go('spend', { spendType: 'Expense' });
+      };
+      return;
+    }
+    if (kind === 'split') {
+      toast('Split takes one receipt and divides category or attendees. Use an existing expense from Spend in the live product.');
+      go('spend', { spendType: 'Expense' });
+      return;
+    }
+    var isDist = kind === 'distance';
+    var drafts = draftReportsFor(S.role);
+    var pref = targetReportId();
+    var reportField = '<div class="field"><label>Report</label><select name="report">' +
+      '<option value="">Unreported (Spend feed)</option>' +
+      drafts.map(function (r) { return '<option value="' + r.id + '"' + (r.id === pref ? ' selected' : '') + '>' + r.name + '</option>'; }).join('') +
+      '</select></div>';
+    $('modal').innerHTML = '<div class="overlay" id="ov"><form class="dialog" id="cf"><h2>' + (isDist ? 'Distance expense' : 'New expense') + '</h2>' +
+      '<div class="field"><label>Merchant</label><input name="merchant" value="' + (isDist ? 'Mileage' : '') + '" required></div>' +
+      '<div class="field"><label>Amount (USD)</label><input name="amount" type="number" step="0.01" value="' + (isDist ? '54.94' : '') + '" required></div>' +
+      '<div class="field"><label>Category</label><select name="category">' + S.data.cats.map(function (c) { return '<option' + (isDist && c==='Mileage' ? ' selected' : '') + '>' + c + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><label>Tag</label><select name="tag">' + S.data.tags.map(function (c) { return '<option>' + c + '</option>'; }).join('') + '</select></div>' +
+      reportField +
+      '<div class="receipt" id="scanBox">Drop a receipt — SmartScan fills merchant and amount in this mockup when you click.</div>' +
+      '<div class="spread" style="margin-top:12px"><button class="btn ghost" type="button" id="cx">Cancel</button><button class="btn green" type="submit">Save</button></div></form></div>';
+    $('cx').onclick = function () { $('modal').innerHTML = ''; };
+    $('scanBox').onclick = function () {
+      var f = $('cf');
+      f.merchant.value = 'Pret A Manger';
+      f.amount.value = '14.80';
+      f.category.value = 'Meals';
+      this.className = 'receipt ok';
+      this.textContent = 'SmartScan · Pret A Manger · $14.80';
+    };
+    $('cf').onsubmit = function (e) {
+      e.preventDefault();
+      var f = e.target;
+      var rid = f.report.value || null;
+      saveExpense({ merchant: f.merchant.value, amount: f.amount.value, category: f.category.value, tag: f.tag.value, receipt: true, report: rid });
+      $('modal').innerHTML = '';
+      toast(rid ? 'Expense added to the report' : 'Expense saved to your feed');
+      if (rid) go('report', { selectedReport: rid }); else go('spend', { spendType: 'Expense' });
+    };
+  }
+
+  function act(name, id) {
+    if (name === 'bulkpay') {
+      var ready = S.data.reports.filter(function (x) { return x.status === 'approved' && !x.paid; });
+      if (!ready.length) { toast('Nothing ready to pay'); return; }
+      openPay(ready); return;
+    }
+    if (name === 'export') { toast('Queued QuickBooks export'); render(); return; }
+    if (name === 'attach') {
+      var exp = S.data.expenses.find(function (x) { return x.id === id; });
+      var dest = S.selectedReport;
+      if (exp && dest) {
+        exp.report = dest;
+        recountReport(dest);
+        toast('Added to report');
+      }
+      render();
+      return;
+    }
+    var r = S.data.reports.find(function (x) { return x.id === id; });
+    if (!r) return;
+    if (name === 'approve') { r.status = 'approved'; r.violations = 0; toast('Approved ' + r.name); }
+    if (name === 'reject') { r.status = 'draft'; toast('Sent back to ' + person(r.user).name); }
+    if (name === 'submit') {
+      recountReport(r.id);
+      if (!S.data.expenses.some(function (e) { return e.report === r.id; })) { toast('Add at least one expense before submitting'); return; }
+      r.status = 'submitted'; r.submitted = '2026-11-25'; toast('Submitted to ' + person(r.to).name);
+    }
+    if (name === 'pay') { openPay([r]); return; }
+    render();
+  }
+
+  function openPay(reports) {
+    var total = reports.reduce(function (s, r) { return s + r.total; }, 0);
+    var who = reports.length === 1 ? person(reports[0].user).name : reports.length + ' reports';
+    var bank = S.data.banks[reports[0].user] || S.data.banks.maya;
+    $('modal').innerHTML = '<div class="overlay"><div class="dialog"><h2>Pay ' + who + '</h2><p class="tiny muted">Total ' + money(total) + '. Workspace reimbursements debit Checking ••1190.</p>' +
+      '<button class="payopt" data-payhow="ach"><strong>ACH to personal bank</strong><div class="sub">' + bank.bank + ' ••' + bank.last4 + ' · 1–2 business days</div></button>' +
+      '<button class="payopt" data-payhow="wallet"><strong>Expensify Wallet</strong><div class="sub">Instant to the member’s Wallet, then they cash out</div></button>' +
+      '<button class="payopt" data-payhow="outside"><strong>Pay outside Expensify</strong><div class="sub">Mark reimbursed for a payroll or check run. Nothing leaves this bank feed.</div></button>' +
+      '<button class="btn ghost" type="button" id="cx" style="margin-top:8px">Cancel</button></div></div>';
+    $('cx').onclick = function () { $('modal').innerHTML = ''; };
+    document.querySelectorAll('[data-payhow]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var how = b.getAttribute('data-payhow');
+        reports.forEach(function (r) { r.paid = true; r.status = 'paid'; r.payHow = how; });
+        $('modal').innerHTML = '';
+        toast(how === 'outside' ? 'Marked paid outside Expensify' : (how === 'wallet' ? 'Paid via Wallet' : 'ACH reimbursement sent'));
+        render();
+      });
+    });
+  }
+
+  function render() {
+    renderChrome();
+    var main = $('main');
+    main.className = 'main' + (S.view === 'inbox' ? ' pad0' : '');
+    var html = {
+      home: renderHome,
+      inbox: renderInbox,
+      reports: renderReports,
+      report: renderReport,
+      spend: renderSpend,
+      expense: renderExpense,
+      wallet: renderWallet,
+      insights: function () {
+        var spend = [4.2, 6.1, 5.4, 8.9, 7.2, 4.8];
+        var months = ['Jun','Jul','Aug','Sep','Oct','Nov'];
+        return '<div class="grid"><div class="card" style="padding:16px"><h2>Spend over time</h2><p class="tiny muted">Northwind Labs · last 6 months</p><div class="bars" style="margin-top:12px">' + spend.map(function (n, i) { return '<div style="flex:1"><i style="height:' + (n / 9 * 100) + '%"></i><span>' + months[i] + '</span></div>'; }).join('') + '</div></div>' +
+          '<div class="card" style="padding:16px"><h2>Top categories</h2><p class="tiny">Software $1,300 · Training $890 · Lodging $312 · Travel $690</p></div>' +
+          '<div class="card" style="padding:16px"><h2>Top merchants</h2><p class="tiny">Amazon Web Services · Web Summit · Kimpton De Witt</p></div>' +
+          '<div class="card" style="padding:16px"><h2>Top spenders</h2><p class="tiny">Alex Rivera · Maya Chen</p></div></div>';
+      },
+      account: renderAccount,
+      workspace: renderWorkspace,
+      invoices: function () { return renderSimpleList('Invoices', S.data.invoices.map(function (i) { return '<div class="spread" style="padding:12px 16px;border-top:1px solid var(--line)"><div><div class="merchant">' + i.customer + '</div><div class="sub">' + i.status + (i.due ? ' · due ' + fmt(i.due) : '') + '</div></div><div class="money">' + money(i.amount) + '</div></div>'; }).join('')); },
+      trips: function () { return renderSimpleList('Trips', S.data.trips.map(function (t) { return '<div class="spread" style="padding:12px 16px;border-top:1px solid var(--line)"><div><div class="merchant">' + t.name + '</div><div class="sub">' + person(t.user).name + ' · ' + t.city + ' · ' + fmt(t.start) + '–' + fmt(t.end) + '</div></div><span class="chip">' + t.status + '</span></div>'; }).join('')); }
+    }[S.view];
+    main.innerHTML = html ? html() : '<p>Unknown view</p>';
+    main.querySelectorAll('[data-nav]').forEach(function (b) { b.addEventListener('click', function () { go(b.getAttribute('data-nav')); }); });
+    main.querySelectorAll('[data-rep]').forEach(function (b) { b.addEventListener('click', function () { go('report', { selectedReport: b.getAttribute('data-rep') }); }); });
+    main.querySelectorAll('[data-exp]').forEach(function (b) { b.addEventListener('click', function () { go('expense', { selectedExpense: b.getAttribute('data-exp') }); }); });
+    main.querySelectorAll('[data-chat]').forEach(function (b) { b.addEventListener('click', function () { go('inbox', { selectedChat: b.getAttribute('data-chat') }); }); });
+    main.querySelectorAll('[data-spend]').forEach(function (b) { b.addEventListener('click', function () { S.spendType = b.getAttribute('data-spend'); render(); }); });
+    main.querySelectorAll('[data-ws]').forEach(function (b) { b.addEventListener('click', function () { S.wsTab = b.getAttribute('data-ws'); render(); }); });
+    main.querySelectorAll('[data-ruletab]').forEach(function (b) { b.addEventListener('click', function () { S.wsRuleTab = b.getAttribute('data-ruletab'); render(); }); });
+    main.querySelectorAll('[data-sfilter]').forEach(function (b) { b.addEventListener('click', function () { S.spendFilter = b.getAttribute('data-sfilter'); S.spendType = 'Expense Report'; go('spend'); }); });
+    main.querySelectorAll('[data-act]').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); act(b.getAttribute('data-act'), b.getAttribute('data-id')); }); });
+    main.querySelectorAll('[data-create]').forEach(function (b) { b.addEventListener('click', function () { openCreate(b.getAttribute('data-create')); }); });
+    var form = $('chatForm');
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = form.m.value.trim();
+      if (!v) return;
+      S.data.messages.r1.push({ who: S.role, text: v });
+      render();
+    });
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') $('modal').innerHTML = '';
+  });
+  render();
+})();
+</script>
+</body>
+</html>
